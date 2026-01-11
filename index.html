@@ -1,33 +1,74 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Creative Guild LLC</title>
-    <link rel="stylesheet" href="styles.css">
-    <script src="./build-info.js"></script>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Creative Guild Games</title>
+    <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
-    <div class="container">
-        <div class="profile-section">
-            <div class="profile-image">
-                CGGames
-            </div>
-            <h1>Creative Guild Games</h1>
-            <p class="subtitle">Game Studio</p>
-            <p class="bio">
-                ***Enter details here.***
-            </p>
+    <!-- Top Navigation / Tab Bar -->
+    <header class="top-bar">
+        <div class="logo">Creative Guild</div>
+        <nav class="tabs">
+            <button class="tab active">Home</button>
+            <button class="tab">Our Games</button>
+            <button class="tab">About Us</button>
+        </nav>
+        <div class="cta">
+            <button class="projects-btn">
+                Ongoing Projects
+                <span>want to help us out?</span>
+            </button>
         </div>
+    </header>
 
-        <div class="contact-section">
+    <!-- Main Content -->
+    <main class="container">
+        <section class="profile-section">
+            <div class="profile-image">CG</div>
+            <h1>Creative Guild Games</h1>
+            <p class="subtitle">Independent Game Studio</p>
+            <p class="bio">
+                We are a small, artist-driven game studio focused on building immersive,
+                mechanically rich experiences with strong visual identity.
+            </p>
+            <p class="bio small">
+                Founded on collaboration and experimentation, Creative Guild Games blends
+                classic design principles with modern technology to create games that feel
+                deliberate, expressive, and memorable.
+            </p>
+        </section>
+
+        <!-- Portfolio / Projects -->
+        <section class="portfolio">
+            <h2 class="section-title">Featured Projects</h2>
+            <div class="projects-grid">
+                <div class="project-card">
+                    <h3>Project Atlas</h3>
+                    <p>A stylized narrative-driven experience exploring power and consequence.</p>
+                    <button class="project-btn">View Project</button>
+                </div>
+                <div class="project-card">
+                    <h3>Project Lumen</h3>
+                    <p>A puzzle-focused title built around light, shadow, and geometry.</p>
+                    <button class="project-btn">View Project</button>
+                </div>
+                <div class="project-card">
+                    <h3>Project Ember</h3>
+                    <p>An experimental prototype emphasizing atmosphere and mood.</p>
+                    <button class="project-btn">View Project</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Contact -->
+        <section class="contact-section">
             <div class="contact-links">
-                <a href="creativeguildllc@gmail.com" class="contact-link">Email</a>
+                <a href="mailto:creativeguildllc@gmail.com" class="contact-link">Email</a>
                 <a href="https://store.steampowered.com/app/3937580/Manipulation/" class="contact-link">Steam</a>
             </div>
-        </div>
-    </div>
-
-    <script src="script.js"></script>
+        </section>
+    </main>
 </body>
 </html>
