@@ -180,6 +180,11 @@ body {
     border-radius: 16px;
     cursor: pointer;
     border: 1px solid rgba(255,255,255,0.12);
+    transition:
+        transform 0.35s cubic-bezier(0.4, 0, 0.2, 1),
+        box-shadow 0.35s cubic-bezier(0.4, 0, 0.2, 1),
+        border-color 0.35s ease,
+        color 0.35s ease;
     transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
 }
 
@@ -217,3 +222,120 @@ body {
 /* Removed project button styling – entire card is now clickable */
 
 
+
+/* Focus + Accessibility */
+.project-card:focus-visible {
+    outline: none;
+    border-color: var(--accent-gold);
+    box-shadow:
+        0 0 0 2px var(--accent-gold),
+        0 10px 26px rgba(28, 49, 42, 0.6);
+}
+
+/* Deco corner notch */
+.project-card::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 18px;
+    height: 18px;
+    background: var(--accent-gold);
+    clip-path: polygon(100% 0, 0 0, 100% 100%);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.project-card:hover::before,
+.project-card:focus-visible::before {
+    opacity: 1;
+}
+
+/* Featured project variant */
+.project-card.featured {
+    border-color: var(--accent-gold);
+    box-shadow: 0 14px 34px rgba(28, 49, 42, 0.6);
+}
+
+.project-card.featured::before {
+    opacity: 1;
+}
+
+
+
+/* =============================
+   Mobile Optimization
+   ============================= */
+
+@media (max-width: 900px) {
+    .hero {
+        grid-template-columns: 1fr;
+        padding: 60px 24px 40px;
+        text-align: center;
+    }
+
+    .hero-art {
+        height: 220px;
+        margin-top: 30px;
+    }
+
+    .hero-actions {
+        justify-content: center;
+        flex-wrap: wrap;
+    }
+
+    .top-bar-inner {
+        flex-wrap: wrap;
+        gap: 20px;
+    }
+
+    .nav-items {
+        order: 3;
+        width: 100%;
+        justify-content: center;
+        gap: 24px;
+        padding-top: 10px;
+    }
+}
+
+@media (max-width: 600px) {
+    .top-bar-inner {
+        padding: 16px 20px;
+    }
+
+    .brand {
+        font-size: 1rem;
+    }
+
+    .projects-btn {
+        padding: 10px 12px;
+    }
+
+    .container {
+        padding: 32px 20px;
+    }
+
+    .projects-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .project-card {
+        padding: 24px;
+    }
+
+    .project-card h3 {
+        font-size: 1.1rem;
+    }
+
+    .project-card p {
+        font-size: 0.9rem;
+    }
+
+    .hero-content h1 {
+        font-size: 2.2rem;
+    }
+
+    .hero-subtitle {
+        font-size: 1rem;
+    }
+}
