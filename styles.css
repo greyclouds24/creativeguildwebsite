@@ -262,6 +262,18 @@ body {
 }
 
 
+/* Footer */
+.site-footer {
+    padding: 24px 0 18px;
+    text-align: center;
+    opacity: 0.45;
+}
+
+.site-version {
+    font-size: 0.7rem;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+}
 
 /* =============================
    Mobile Optimization
@@ -339,3 +351,4 @@ body {
         font-size: 1rem;
     }
 }
+
