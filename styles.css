@@ -1,226 +1,234 @@
+/* Reset */
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
 }
 
+/* Color Palette */
+:root {
+    --dark-wine: #311C23;
+    --plum: #623745;
+    --rose: #935368;
+    --deep-green: #1C312A;
+    --teal: #376254;
+    --mint: #53937E;
+    --gold: #DEB866;
+}
+
 body {
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
-    line-height: 1.6;
-    color: #333;
-    background: linear-gradient(135deg, #a47148 0%, #6f4e37 100%);
+    font-family: "Futura", "Segoe UI", sans-serif;
+    background: linear-gradient(135deg, var(--dark-wine), var(--deep-green));
+    color: var(--dark-wine);
     min-height: 100vh;
+}
+
+/* Top Bar / Tabs */
+.top-bar {
     display: flex;
     align-items: center;
-    justify-content: center;
-    padding: 20px;
+    justify-content: space-between;
+    padding: 20px 40px;
+    background: rgba(255, 255, 255, 0.92);
+    backdrop-filter: blur(8px);
+    border-bottom: 2px solid var(--gold);
 }
 
-.container {
-    max-width: 800px;
+.logo {
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+}
+
+.tabs {
+    display: flex;
+    gap: 20px;
+}
+
+.tab {
+    background: none;
+    border: none;
+    font-size: 0.9rem;
+    letter-spacing: 1px;
+    cursor: pointer;
+    color: var(--plum);
+    padding: 8px 12px;
+    position: relative;
+}
+
+.tab::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    width: 0;
+    height: 2px;
+    background: var(--gold);
+    transition: width 0.3s ease;
+}
+
+.tab:hover::after,
+.tab.active::after {
     width: 100%;
+}
+
+/* Ongoing Projects Button */
+.projects-btn {
+    background: transparent;
+    border: 2px solid var(--plum);
+    padding: 10px 18px;
+    font-weight: 600;
+    cursor: pointer;
+    text-align: left;
+    transition: all 0.3s ease;
+}
+
+.projects-btn span {
+    display: block;
+    font-size: 0.75rem;
+    font-weight: 400;
+    color: var(--rose);
+}
+
+.projects-btn:hover {
+    border-color: var(--gold);
+    color: var(--gold);
+}
+
+/* Main Container */
+.container {
+    max-width: 1100px;
+    margin: 60px auto;
     background: rgba(255, 255, 255, 0.95);
-    backdrop-filter: blur(10px);
     border-radius: 20px;
-    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
-    padding: 60px 40px;
-    text-align: center;
-    animation: fadeInUp 0.8s ease-out;
+    padding: 60px 50px;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
 }
 
-@keyframes fadeInUp {
-    from {
-        opacity: 0;
-        transform: translateY(30px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
-}
-
+/* Profile */
 .profile-section {
-    margin-bottom: 50px;
+    text-align: center;
+    margin-bottom: 70px;
 }
 
 .profile-image {
     width: 120px;
     height: 120px;
-    border-radius: 50%;
     margin: 0 auto 30px;
-    background: linear-gradient(45deg, #8B5A2B, #6F4E37);
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--plum), var(--rose));
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 48px;
+    font-weight: 700;
+    font-size: 2rem;
     color: white;
-    font-weight: bold;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
 }
 
 h1 {
-    font-size: 2.5rem;
-    font-weight: 700;
+    font-size: 2.6rem;
+    letter-spacing: 3px;
     margin-bottom: 10px;
-    background: linear-gradient(135deg, #8B5A2B, #6F4E37);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
 }
 
 .subtitle {
-    font-size: 1.2rem;
-    color: #666;
-    margin-bottom: 30px;
+    font-size: 1.1rem;
+    color: var(--teal);
+    margin-bottom: 25px;
 }
 
 .bio {
-    font-size: 1.1rem;
-    color: #555;
-    max-width: 600px;
-    margin: 0 auto;
+    max-width: 700px;
+    margin: 0 auto 15px;
     line-height: 1.8;
+    color: #444;
 }
 
-.hobbies-section {
-    margin-top: 50px;
-}
-
-.section-title {
-    font-size: 1.8rem;
-    font-weight: 600;
-    margin-bottom: 30px;
-    color: #333;
-}
-
-.hobbies-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-    gap: 25px;
-    margin-top: 30px;
-}
-
-.hobby-card {
-    background: white;
-    border-radius: 15px;
-    padding: 30px 25px;
-    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
-    transition: all 0.3s ease;
-    border: 2px solid transparent;
-}
-
-.hobby-card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
-    border-color: #8B5A2B;
-}
-
-.hobby-icon {
-    width: 60px;
-    height: 60px;
-    border-radius: 12px;
-    margin: 0 auto 20px;
-    background: linear-gradient(135deg, #8B5A2B, #6F4E37);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 24px;
-    color: white;
-    font-weight: bold;
-}
-
-.hobby-title {
-    font-size: 1.3rem;
-    font-weight: 600;
-    margin-bottom: 10px;
-    color: #333;
-}
-
-.hobby-description {
-    color: #666;
+.bio.small {
     font-size: 0.95rem;
-    line-height: 1.5;
 }
 
+/* Portfolio */
+.section-title {
+    text-align: center;
+    font-size: 1.8rem;
+    letter-spacing: 2px;
+    margin-bottom: 40px;
+}
+
+.projects-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 30px;
+}
+
+.project-card {
+    padding: 30px;
+    border: 2px solid var(--plum);
+    border-radius: 12px;
+    background: white;
+    transition: transform 0.3s ease, border-color 0.3s ease;
+}
+
+.project-card:hover {
+    transform: translateY(-6px);
+    border-color: var(--gold);
+}
+
+.project-card h3 {
+    margin-bottom: 10px;
+    letter-spacing: 1px;
+}
+
+.project-card p {
+    font-size: 0.9rem;
+    margin-bottom: 20px;
+    color: #555;
+}
+
+.project-btn {
+    background: transparent;
+    border: 2px solid var(--plum);
+    padding: 8px 14px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.project-btn:hover {
+    border-color: var(--gold);
+    color: var(--gold);
+}
+
+/* Contact */
 .contact-section {
-    margin-top: 50px;
+    margin-top: 70px;
     padding-top: 30px;
-    border-top: 1px solid #e0e0e0;
+    border-top: 1px solid #ddd;
 }
 
 .contact-links {
     display: flex;
     justify-content: center;
     gap: 30px;
-    flex-wrap: wrap;
 }
 
 .contact-link {
-    color: #8B5A2B;
     text-decoration: none;
+    color: var(--plum);
     font-weight: 500;
-    transition: color 0.3s ease;
 }
 
 .contact-link:hover {
-    color: #6F4E37;
+    color: var(--gold);
 }
 
-.loading {
-    text-align: center;
-    color: #666;
-    font-style: italic;
-}
-
-@media (max-width: 600px) {
+/* Responsive */
+@media (max-width: 768px) {
+    .top-bar {
+        flex-wrap: wrap;
+        gap: 20px;
+    }
     .container {
         padding: 40px 25px;
-        margin: 10px;
     }
-
-    h1 {
-        font-size: 2rem;
-    }
-
-    .hobbies-grid {
-        grid-template-columns: 1fr;
-    }
-
-    .contact-links {
-        flex-direction: column;
-        gap: 15px;
-    }
-}
-
-/* Photography Page Styles */
-.photography-container {
-    max-width: 1200px;
-    width: 100%;
-    background: rgba(255, 255, 255, 0.95);
-    backdrop-filter: blur(10px);
-    border-radius: 20px;
-    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
-    padding: 40px;
-    margin: 20px;
-}
-
-.back-link {
-    display: inline-flex;
-    align-items: center;
-    color: #8B5A2B;
-    text-decoration: none;
-    font-weight: 500;
-    margin-bottom: 30px;
-}
-
-.back-link:hover {
-    color: #6F4E37;
-}
-
-.page-title {
-    font-size: 2.5rem;
-    font-weight: 700;
-    margin-bottom: 10px;
-    background: linear-gradient(135deg, #8B5A2B, #6F4E37);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
 }
