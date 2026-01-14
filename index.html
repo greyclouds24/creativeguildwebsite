@@ -89,7 +89,12 @@
             <div class="social-grid">
 
                 <!-- (7) Biggest cards at top -->
-                <a href="mailto:creativeguildllc@gmail.com" class="social-card social-card--primary">
+                <a
+                    href="#"
+                    id="email-link"
+                    class="social-card social-card--primary"
+                    data-email="creativeguildllc@gmail.com"
+                >
                     <span class="social-icon" aria-hidden="true">
                         <!-- Email icon -->
                         <svg viewBox="0 0 24 24" width="22" height="22" fill="currentColor">
@@ -102,7 +107,7 @@
                     </div>
                 </a>
 
-                <a href="https://store.steampowered.com/app/3937580/Manipulation/" class="social-card social-card--primary">
+                <a href="https://store.steampowered.com/app/3937580/Manipulation/" class="social-card social-card--primary" target="_blank" rel="noopener noreferrer">
                     <span class="social-icon" aria-hidden="true">
                         <!-- Steam-ish icon (simple) -->
                         <svg viewBox="0 0 24 24" width="22" height="22" fill="currentColor">
@@ -110,13 +115,13 @@
                         </svg>
                     </span>
                     <div class="social-text">
-                        <div class="social-title">Steam</div>
-                        <div class="social-handle">YourSteamName</div>
+                        <div class="social-title">Steam Page</div>
+                        <div class="social-handle">Manipulation</div>
                     </div>
                 </a>
 
                 <!-- (6) Smaller cards underneath (filler links) -->
-                <a href="https://www.instagram.com/creative_guild_games" class="social-card">
+                <a href="https://www.instagram.com/creative_guild_games" class="social-card" target="_blank" rel="noopener noreferrer">
                     <span class="social-icon" aria-hidden="true">
                         <!-- Instagram icon -->
                         <svg viewBox="0 0 24 24" width="22" height="22" fill="currentColor">
@@ -129,7 +134,7 @@
                     </div>
                 </a>
 
-                <a href="https://discord.gg/2tXrfDcEGQ" class="social-card">
+                <a href="https://discord.gg/2tXrfDcEGQ" class="social-card" target="_blank" rel="noopener noreferrer">
                     <span class="social-icon" aria-hidden="true">
                         <!-- Discord icon (simple) -->
                         <svg viewBox="0 0 24 24" width="22" height="22" fill="currentColor">
@@ -142,7 +147,7 @@
                     </div>
                 </a>
 
-                <a href="https://www.tiktok.com/@creative_guild_games" class="social-card">
+                <a href="https://www.tiktok.com/@creative_guild_games" class="social-card" target="_blank" rel="noopener noreferrer">
                     <span class="social-icon" aria-hidden="true">
                         <!-- TikTok icon (simple note) -->
                         <svg viewBox="0 0 24 24" width="22" height="22" fill="currentColor">
@@ -155,7 +160,7 @@
                     </div>
                 </a>
 
-                <a href="https://www.reddit.com/r/manipulationgame" class="social-card">
+                <a href="https://www.reddit.com/r/manipulationgame" class="social-card" target="_blank" rel="noopener noreferrer">
                     <span class="social-icon" aria-hidden="true">
                         <!-- Reddit icon (simple) -->
                         <svg viewBox="0 0 24 24" width="22" height="22" fill="currentColor">
@@ -173,7 +178,41 @@
     </main>
 
     <footer class="site-footer">
-        <span class="site-version">v1.9</span>
+        <span class="site-version">v2.0</span>
     </footer>
+
+    <script>
+        (function () {
+            var emailLink = document.getElementById('email-link');
+            if (!emailLink) return;
+
+            emailLink.addEventListener('click', function (event) {
+                event.preventDefault();
+                var email = emailLink.getAttribute('data-email');
+                if (!email) return;
+
+                if (navigator.clipboard && navigator.clipboard.writeText) {
+                    navigator.clipboard.writeText(email).then(function () {
+                        alert('Email address copied to clipboard: ' + email);
+                    }).catch(function () {
+                        alert('Could not copy email automatically. You can copy it manually: ' + email);
+                    });
+                } else {
+                    // Fallback for older browsers
+                    var tempInput = document.createElement('input');
+                    tempInput.value = email;
+                    document.body.appendChild(tempInput);
+                    tempInput.select();
+                    try {
+                        document.execCommand('copy');
+                        alert('Email address copied to clipboard: ' + email);
+                    } catch (e) {
+                        alert('Could not copy email automatically. You can copy it manually: ' + email);
+                    }
+                    document.body.removeChild(tempInput);
+                }
+            });
+        })();
+    </script>
 </body>
 </html>
