@@ -245,6 +245,60 @@ body {
     margin-top: 80px;
 }
 
+/* Help Wanted form */
+.help-form {
+    max-width: 720px;
+    margin: 0 auto;
+}
+
+.form-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 18px 24px;
+    margin-bottom: 24px;
+}
+
+.form-field {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    font-size: 0.9rem;
+}
+
+.form-field--full {
+    grid-column: 1 / -1;
+}
+
+.form-field label {
+    opacity: 0.85;
+}
+
+.form-field input,
+.form-field textarea {
+    border-radius: 10px;
+    border: 1px solid rgba(255,255,255,0.25);
+    padding: 10px 12px;
+    background: rgba(0,0,0,0.16);
+    color: #fff;
+    font-family: inherit;
+    font-size: 0.9rem;
+}
+
+.form-field input::placeholder,
+.form-field textarea::placeholder {
+    opacity: 0.6;
+}
+
+.form-field input:focus,
+.form-field textarea:focus {
+    outline: none;
+    border-color: var(--accent-gold);
+}
+
+.form-submit-btn {
+    margin-top: 8px;
+}
+
 /* (7) Social links grid */
 .social-grid {
     display: grid;

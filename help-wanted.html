@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Creative Guild Games — Help Wanted</title>
+    <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+    <header class="top-bar">
+        <div class="top-bar-inner">
+            <div class="brand">
+                <span class="brand-mark"></span>
+                <span class="brand-text">Creative Guild LLC</span>
+            </div>
+
+            <nav class="nav-items">
+                <a class="nav-item" href="index.html">Home</a>
+                <a class="nav-item" href="our-games.html">Our Games</a>
+                <a class="nav-item" href="about-us.html">About Us</a>
+            </nav>
+
+            <div class="nav-actions">
+                <button class="projects-btn" disabled>
+                    <strong>Ongoing Projects</strong>
+                    <span>You're on the application page</span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <main class="container">
+        <section class="profile-section">
+            <h1 class="title-bordered">Apply to Help Us Out</h1>
+            <p class="subtitle">Freelancers, collaborators, and playtesters welcome</p>
+            <p class="bio">
+                Fill out this short form to tell us who you are, what you do, and how you’d like to help.
+                We’ll review submissions as we spin up new work on current and future projects.
+            </p>
+        </section>
+
+        <section class="portfolio">
+            <h2 class="section-title">Application Form</h2>
+
+            <form
+                class="help-form"
+                action="mailto:creativeguildllc@gmail.com"
+                method="POST"
+                enctype="text/plain"
+            >
+                <div class="form-grid">
+                    <div class="form-field">
+                        <label for="name">Name</label>
+                        <input type="text" id="name" name="Name" required />
+                    </div>
+
+                    <div class="form-field">
+                        <label for="email">Email</label>
+                        <input type="email" id="email" name="Email" required />
+                    </div>
+
+                    <div class="form-field">
+                        <label for="role">Role / How you’d like to help</label>
+                        <input
+                            type="text"
+                            id="role"
+                            name="Role"
+                            placeholder="e.g. Unity dev, 3D artist, writer, playtester"
+                            required
+                        />
+                    </div>
+
+                    <div class="form-field">
+                        <label for="portfolio">Portfolio / Links</label>
+                        <input
+                            type="url"
+                            id="portfolio"
+                            name="Portfolio"
+                            placeholder="Portfolio, itch.io, ArtStation, LinkedIn, etc."
+                        />
+                    </div>
+
+                    <div class="form-field form-field--full">
+                        <label for="experience">Experience (short summary)</label>
+                        <textarea
+                            id="experience"
+                            name="Experience"
+                            rows="4"
+                            placeholder="Tell us a bit about your background, projects you’ve worked on, and tools you’re comfortable with."
+                        ></textarea>
+                    </div>
+
+                    <div class="form-field form-field--full">
+                        <label for="interest">What interests you about Creative Guild Games?</label>
+                        <textarea
+                            id="interest"
+                            name="Interest"
+                            rows="3"
+                        ></textarea>
+                    </div>
+
+                    <div class="form-field form-field--full">
+                        <label for="availability">Availability & Rates (optional)</label>
+                        <textarea
+                            id="availability"
+                            name="Availability"
+                            rows="3"
+                            placeholder="Rough availability, time zone, and typical rates if applicable."
+                        ></textarea>
+                    </div>
+                </div>
+
+                <button type="submit" class="projects-btn form-submit-btn">
+                    <strong>Submit Application</strong>
+                    <span>Opens your email client to send details</span>
+                </button>
+            </form>
+        </section>
+    </main>
+
+    <footer class="site-footer">
+        <span class="site-version">v2.1</span>
+    </footer>
+</body>
+</html>
+
