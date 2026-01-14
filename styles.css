@@ -195,6 +195,19 @@ body {
     opacity: 0.8;
 }
 
+.project-status {
+    display: inline-block;
+    margin-top: 12px;
+    padding: 4px 12px;
+    border-radius: 999px;
+    background: var(--accent-gold);
+    color: var(--accent-green);
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+}
+
 /* (4) Full-card empty button overlay:
    - button covers the card
    - button is visually "nothing"
