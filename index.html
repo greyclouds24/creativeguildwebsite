@@ -10,34 +10,36 @@
     <!-- Top Navigation / Tab Bar -->
     <header class="top-bar">
       <div class="top-bar-inner">
-    
+
         <div class="brand">
           <span class="brand-mark"></span>
-          <span class="brand-text">Creative Guild</span>
+          <span class="brand-text">Creative Guild LLC</span>
         </div>
-    
+
         <nav class="nav-items">
           <a class="nav-item active">Home</a>
           <a class="nav-item">Our Games</a>
           <a class="nav-item">About Us</a>
         </nav>
-    
+
         <div class="nav-actions">
           <button class="projects-btn">
             <strong>Ongoing Projects</strong>
             <span>want to help us out?</span>
           </button>
         </div>
-    
+
       </div>
     </header>
-
 
     <!-- Main Content -->
     <main class="container">
         <section class="profile-section">
-            <div class="profile-image">CG</div>
-            <h1>Creative Guild Games</h1>
+            <!-- (1) Removed the CG profile image block -->
+
+            <!-- (2) Times New Roman + green border -->
+            <h1 class="title-bordered">Creative Guild Games</h1>
+
             <p class="subtitle">Independent Game Studio</p>
             <p class="bio">
                 We are a small, artist-driven game studio focused on building immersive,
@@ -53,33 +55,120 @@
         <!-- Portfolio / Projects -->
         <section class="portfolio">
             <h2 class="section-title">Featured Projects</h2>
+
             <div class="projects-grid">
                 <div class="project-card">
                     <h3>Project Atlas</h3>
                     <p>A stylized narrative-driven experience exploring power and consequence.</p>
-                    <button class="project-btn">View Project</button>
+
+                    <!-- (4) Empty, full-card button overlay -->
+                    <button class="project-btn" aria-label="View Project Atlas"></button>
                 </div>
+
                 <div class="project-card">
                     <h3>Project Lumen</h3>
                     <p>A puzzle-focused title built around light, shadow, and geometry.</p>
-                    <button class="project-btn">View Project</button>
+
+                    <button class="project-btn" aria-label="View Project Lumen"></button>
                 </div>
+
                 <div class="project-card">
                     <h3>Project Ember</h3>
                     <p>An experimental prototype emphasizing atmosphere and mood.</p>
-                    <button class="project-btn">View Project</button>
+
+                    <button class="project-btn" aria-label="View Project Ember"></button>
                 </div>
             </div>
         </section>
 
         <!-- Contact -->
         <section class="contact-section">
-            <div class="contact-links">
-                <a href="mailto:creativeguildllc@gmail.com" class="contact-link">Email</a>
-                <a href="https://store.steampowered.com/app/3937580/Manipulation/" class="contact-link">Steam</a>
+            <div class="social-grid">
+
+                <!-- (7) Biggest cards at top -->
+                <a href="mailto:creativeguildllc@gmail.com" class="social-card social-card--primary">
+                    <span class="social-icon" aria-hidden="true">
+                        <!-- Email icon -->
+                        <svg viewBox="0 0 24 24" width="22" height="22" fill="currentColor">
+                            <path d="M20 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4-8 5L4 8V6l8 5 8-5v2z"/>
+                        </svg>
+                    </span>
+                    <div class="social-text">
+                        <div class="social-title">Email</div>
+                        <div class="social-handle">creativeguildllc@gmail.com</div>
+                    </div>
+                </a>
+
+                <a href="https://store.steampowered.com/app/3937580/Manipulation/" class="social-card social-card--primary">
+                    <span class="social-icon" aria-hidden="true">
+                        <!-- Steam-ish icon (simple) -->
+                        <svg viewBox="0 0 24 24" width="22" height="22" fill="currentColor">
+                            <path d="M17.5 3a3.5 3.5 0 0 0-3.45 4.1l-3.27 2.36a3.5 3.5 0 0 0-4.52 1.22L2 9.6v4.8l5.2 2.17A3.5 3.5 0 1 0 11 20.5l6.02-4.35A3.5 3.5 0 1 0 17.5 3zm0 2a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3zM7.5 15a1.5 1.5 0 1 1-.01 3A1.5 1.5 0 0 1 7.5 15z"/>
+                        </svg>
+                    </span>
+                    <div class="social-text">
+                        <div class="social-title">Steam</div>
+                        <div class="social-handle">YourSteamName</div>
+                    </div>
+                </a>
+
+                <!-- (6) Smaller cards underneath (filler links) -->
+                <a href="https://instagram.com/yourhandle" class="social-card">
+                    <span class="social-icon" aria-hidden="true">
+                        <!-- Instagram icon -->
+                        <svg viewBox="0 0 24 24" width="22" height="22" fill="currentColor">
+                            <path d="M7 2h10a5 5 0 0 1 5 5v10a5 5 0 0 1-5 5H7a5 5 0 0 1-5-5V7a5 5 0 0 1 5-5zm10 2H7a3 3 0 0 0-3 3v10a3 3 0 0 0 3 3h10a3 3 0 0 0 3-3V7a3 3 0 0 0-3-3zm-5 3.5A4.5 4.5 0 1 1 7.5 12 4.5 4.5 0 0 1 12 7.5zm0 2A2.5 2.5 0 1 0 14.5 12 2.5 2.5 0 0 0 12 9.5zM17.8 6.2a1 1 0 1 1-1 1 1 1 0 0 1 1-1z"/>
+                        </svg>
+                    </span>
+                    <div class="social-text">
+                        <div class="social-title">Instagram</div>
+                        <div class="social-handle">@yourhandle</div>
+                    </div>
+                </a>
+
+                <a href="https://discord.gg/yourinvite" class="social-card">
+                    <span class="social-icon" aria-hidden="true">
+                        <!-- Discord icon (simple) -->
+                        <svg viewBox="0 0 24 24" width="22" height="22" fill="currentColor">
+                            <path d="M20 4.6A16.5 16.5 0 0 0 16 3l-.3.6a15.2 15.2 0 0 1 2.3.9 10.8 10.8 0 0 0-3.6-1.1A13.1 13.1 0 0 0 12 3a13.1 13.1 0 0 0-2.4.4A10.8 10.8 0 0 0 6 4.5c.8-.4 1.6-.7 2.3-.9L8 3A16.5 16.5 0 0 0 4 4.6C2.3 7.1 1.7 9.5 2 12c1.4 2.2 3.4 3.5 6 4l.7-1.2a7.7 7.7 0 0 1-2.4-1.2l.6-.5a9.8 9.8 0 0 0 10.2 0l.6.5a7.7 7.7 0 0 1-2.4 1.2l.7 1.2c2.6-.5 4.6-1.8 6-4 .3-2.5-.3-4.9-2-7.4zM9.5 12.7c-.7 0-1.3-.6-1.3-1.4 0-.8.6-1.4 1.3-1.4.7 0 1.3.6 1.3 1.4 0 .8-.6 1.4-1.3 1.4zm5 0c-.7 0-1.3-.6-1.3-1.4 0-.8.6-1.4 1.3-1.4.7 0 1.3.6 1.3 1.4 0 .8-.6 1.4-1.3 1.4z"/>
+                        </svg>
+                    </span>
+                    <div class="social-text">
+                        <div class="social-title">Discord</div>
+                        <div class="social-handle">discord.gg/yourinvite</div>
+                    </div>
+                </a>
+
+                <a href="https://tiktok.com/@yourhandle" class="social-card">
+                    <span class="social-icon" aria-hidden="true">
+                        <!-- TikTok icon (simple note) -->
+                        <svg viewBox="0 0 24 24" width="22" height="22" fill="currentColor">
+                            <path d="M14 3v10.2a3.8 3.8 0 1 1-3-3.7V7.2A6.2 6.2 0 1 0 16 13V8.2c1.2.9 2.7 1.4 4 1.4V7.2c-2 0-4-1.6-4-4.2H14z"/>
+                        </svg>
+                    </span>
+                    <div class="social-text">
+                        <div class="social-title">TikTok</div>
+                        <div class="social-handle">@yourhandle</div>
+                    </div>
+                </a>
+
+                <a href="https://reddit.com/r/yoursubreddit" class="social-card">
+                    <span class="social-icon" aria-hidden="true">
+                        <!-- Reddit icon (simple) -->
+                        <svg viewBox="0 0 24 24" width="22" height="22" fill="currentColor">
+                            <path d="M20.5 12.2c.2-.6.3-1.2.3-1.8a2.3 2.3 0 1 0-4.2 1.4c-1.2-.8-2.8-1.3-4.6-1.4l.8-3.1 2.2.5a1.7 1.7 0 1 0 .2-1l-2.9-.7a.8.8 0 0 0-1 .6l-1 3.9c-1.9.1-3.6.6-4.9 1.5a2.3 2.3 0 1 0-3.9 1.8c0 3 4.1 5.4 9.1 5.4s9.1-2.4 9.1-5.4a4 4 0 0 0-.2-1.7zM8.1 14.6a1.2 1.2 0 1 1 0-2.4 1.2 1.2 0 0 1 0 2.4zm7.8 0a1.2 1.2 0 1 1 0-2.4 1.2 1.2 0 0 1 0 2.4zM12 18.2c-1.4 0-2.7-.5-3.6-1.4a.6.6 0 0 1 .9-.9c.7.7 1.7 1 2.7 1s2-.3 2.7-1a.6.6 0 0 1 .9.9c-.9.9-2.2 1.4-3.6 1.4z"/>
+                        </svg>
+                    </span>
+                    <div class="social-text">
+                        <div class="social-title">Reddit</div>
+                        <div class="social-handle">r/yoursubreddit</div>
+                    </div>
+                </a>
+
             </div>
         </section>
     </main>
+
     <footer class="site-footer">
         <span class="site-version">v1.7</span>
     </footer>
