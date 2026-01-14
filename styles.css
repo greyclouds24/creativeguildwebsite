@@ -91,77 +91,41 @@ body {
     color: var(--accent-gold);
 }
 
-/* Hero */
-.hero {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 80px 32px 60px;
-    display: grid;
-    grid-template-columns: 1.2fr 1fr;
-    gap: 40px;
-    align-items: center;
-}
-
-.hero-content h1 {
-    font-size: 3rem;
-    margin-bottom: 20px;
-}
-
-.hero-subtitle {
-    font-size: 1.2rem;
-    opacity: 0.85;
-    margin-bottom: 20px;
-}
-
-.hero-text {
-    max-width: 520px;
-    line-height: 1.7;
-    margin-bottom: 30px;
-}
-
-.hero-actions {
-    display: flex;
-    gap: 16px;
-}
-
-.primary-btn,
-.secondary-btn {
-    padding: 10px 18px;
-    cursor: pointer;
-    border: none;
-}
-
-.primary-btn {
-    background: var(--accent-green);
-    color: white;
-}
-
-.secondary-btn {
-    background: var(--card);
-    color: white;
-    border: 1px solid rgba(255,255,255,0.4);
-}
-
-.primary-btn:hover,
-.secondary-btn:hover {
-    border-color: var(--accent-gold);
-}
-
-.hero-art {
-    width: 100%;
-    height: 320px;
-    border-radius: 50%;
-    background: radial-gradient(circle at center, #53937E, #1C312A);
-    opacity: 0.85;
-}
-
 /* Portfolio */
 .container {
     max-width: 1200px;
     margin: 0 auto 80px;
     padding: 40px 32px;
+
+    /* (3) Center main content block */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 
+/* Keep sections from stretching weirdly when container is flex */
+.profile-section,
+.portfolio,
+.contact-section {
+    width: 100%;
+}
+
+/* (2) Green border + Times New Roman for title */
+.title-bordered {
+    display: inline-block;
+    font-family: "Times New Roman", Times, serif;
+    border: 2px solid var(--accent-mint);
+    padding: 10px 16px;
+    border-radius: 12px;
+    margin-bottom: 14px;
+}
+
+/* Ensure profile section stays nice */
+.profile-section {
+    text-align: center;
+}
+
+/* Section title stays centered */
 .section-title {
     text-align: center;
     margin-bottom: 40px;
@@ -173,19 +137,21 @@ body {
     gap: 24px;
 }
 
+/* Project cards */
 .project-card {
     position: relative;
     background: #6b3f4c;
     padding: 28px;
     border-radius: 16px;
-    cursor: pointer;
     border: 1px solid rgba(255,255,255,0.12);
     transition:
         transform 0.35s cubic-bezier(0.4, 0, 0.2, 1),
         box-shadow 0.35s cubic-bezier(0.4, 0, 0.2, 1),
         border-color 0.35s ease,
         color 0.35s ease;
-    transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+
+    /* (5) Center header + paragraph text in each card */
+    text-align: center;
 }
 
 .project-card:hover {
@@ -201,31 +167,41 @@ body {
     color: #ffffff;
 }
 
-.project-icon {
-    width: 56px;
-    height: 56px;
-    border-radius: 50%;
-    border: 1px solid rgba(255,255,255,0.4);
-    margin-bottom: 20px;
-}
-
 .project-card h3 {
-    margin-bottom: 6px;
+    margin-bottom: 10px;
 }
 
 .project-card p {
     font-size: 0.85rem;
     opacity: 0.8;
-    margin-bottom: 20px;
 }
 
-/* Removed project button styling – entire card is now clickable */
+/* (4) Full-card empty button overlay:
+   - button covers the card
+   - button is visually "nothing"
+   - card keeps all styles/hover effects
+*/
+.project-btn {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    border: 0;
+    padding: 0;
+    margin: 0;
+    background: transparent;
+    color: transparent;
+    cursor: pointer;
+    border-radius: 16px;
 
-
-
-/* Focus + Accessibility */
-.project-card:focus-visible {
+    /* remove any default button styling */
+    appearance: none;
+    -webkit-appearance: none;
     outline: none;
+}
+
+/* Make keyboard focus visible on the CARD (not the button) */
+.project-card:focus-within {
     border-color: var(--accent-gold);
     box-shadow:
         0 0 0 2px var(--accent-gold),
@@ -247,20 +223,95 @@ body {
 }
 
 .project-card:hover::before,
-.project-card:focus-visible::before {
+.project-card:focus-within::before {
     opacity: 1;
 }
 
-/* Featured project variant */
-.project-card.featured {
+/* (6) Bigger gap between project cards and contact */
+.contact-section {
+    margin-top: 80px;
+}
+
+/* (7) Social links grid */
+.social-grid {
+    display: grid;
+    gap: 16px;
+    grid-template-columns: repeat(2, minmax(220px, 1fr));
+    justify-content: center;
+    max-width: 760px; /* prevents taking whole page */
+    margin: 0 auto;
+}
+
+/* Card base */
+.social-card {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    text-decoration: none;
+    color: white;
+    background: rgba(255,255,255,0.06);
+    border: 1px solid rgba(255,255,255,0.12);
+    border-radius: 14px;
+    padding: 14px 16px;
+    transition: transform 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease;
+}
+
+.social-card:hover {
+    transform: translateY(-3px);
     border-color: var(--accent-gold);
-    box-shadow: 0 14px 34px rgba(28, 49, 42, 0.6);
+    box-shadow: 0 10px 24px rgba(0,0,0,0.22);
 }
 
-.project-card.featured::before {
-    opacity: 1;
+/* Big top cards */
+.social-card--primary {
+    grid-column: span 1;
+    padding: 18px 18px;
+    background: rgba(255,255,255,0.08);
 }
 
+/* Make the first row bigger by spanning columns on wider screens */
+@media (min-width: 760px) {
+    .social-card--primary:first-child {
+        grid-column: 1 / 2;
+    }
+    .social-card--primary:nth-child(2) {
+        grid-column: 2 / 3;
+    }
+}
+
+/* Icon pill */
+.social-icon {
+    width: 42px;
+    height: 42px;
+    border-radius: 12px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(0,0,0,0.18);
+    border: 1px solid rgba(255,255,255,0.14);
+    color: var(--accent-gold);
+    flex: 0 0 auto;
+}
+
+.social-text {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    min-width: 0;
+}
+
+.social-title {
+    font-weight: 700;
+    line-height: 1.1;
+}
+
+.social-handle {
+    font-size: 0.85rem;
+    opacity: 0.8;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
 
 /* Footer */
 .site-footer {
@@ -280,22 +331,6 @@ body {
    ============================= */
 
 @media (max-width: 900px) {
-    .hero {
-        grid-template-columns: 1fr;
-        padding: 60px 24px 40px;
-        text-align: center;
-    }
-
-    .hero-art {
-        height: 220px;
-        margin-top: 30px;
-    }
-
-    .hero-actions {
-        justify-content: center;
-        flex-wrap: wrap;
-    }
-
     .top-bar-inner {
         flex-wrap: wrap;
         gap: 20px;
@@ -307,6 +342,17 @@ body {
         justify-content: center;
         gap: 24px;
         padding-top: 10px;
+    }
+}
+
+@media (max-width: 760px) {
+    .social-grid {
+        grid-template-columns: 1fr;
+        max-width: 520px;
+    }
+
+    .social-card--primary {
+        grid-column: auto;
     }
 }
 
@@ -342,13 +388,4 @@ body {
     .project-card p {
         font-size: 0.9rem;
     }
-
-    .hero-content h1 {
-        font-size: 2.2rem;
-    }
-
-    .hero-subtitle {
-        font-size: 1rem;
-    }
 }
-
