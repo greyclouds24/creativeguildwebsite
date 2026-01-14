@@ -107,14 +107,7 @@
                     </div>
                 </a>
 
-                <a
-                    href="https://store.steampowered.com/app/3937580/Manipulation/"
-                    class="social-card social-card--primary"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    data-web-url="https://store.steampowered.com/app/3937580/Manipulation/"
-                    data-app-url="steam://openurl/https://store.steampowered.com/app/3937580/Manipulation/"
-                >
+                <a href="https://store.steampowered.com/app/3937580/Manipulation/" class="social-card social-card--primary" target="_blank" rel="noopener noreferrer">
                     <span class="social-icon" aria-hidden="true">
                         <!-- Steam-ish icon (simple) -->
                         <svg viewBox="0 0 24 24" width="22" height="22" fill="currentColor">
@@ -128,14 +121,7 @@
                 </a>
 
                 <!-- (6) Smaller cards underneath (filler links) -->
-                <a
-                    href="https://www.instagram.com/creative_guild_games"
-                    class="social-card"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    data-web-url="https://www.instagram.com/creative_guild_games"
-                    data-app-url="instagram://user?username=creative_guild_games"
-                >
+                <a href="https://www.instagram.com/creative_guild_games" class="social-card" target="_blank" rel="noopener noreferrer">
                     <span class="social-icon" aria-hidden="true">
                         <!-- Instagram icon -->
                         <svg viewBox="0 0 24 24" width="22" height="22" fill="currentColor">
@@ -148,14 +134,7 @@
                     </div>
                 </a>
 
-                <a
-                    href="https://discord.gg/2tXrfDcEGQ"
-                    class="social-card"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    data-web-url="https://discord.gg/2tXrfDcEGQ"
-                    data-app-url="discord://discord.gg/2tXrfDcEGQ"
-                >
+                <a href="https://discord.gg/2tXrfDcEGQ" class="social-card" target="_blank" rel="noopener noreferrer">
                     <span class="social-icon" aria-hidden="true">
                         <!-- Discord icon (simple) -->
                         <svg viewBox="0 0 24 24" width="22" height="22" fill="currentColor">
@@ -168,14 +147,7 @@
                     </div>
                 </a>
 
-                <a
-                    href="https://www.tiktok.com/@creative_guild_games"
-                    class="social-card"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    data-web-url="https://www.tiktok.com/@creative_guild_games"
-                    data-app-url="tiktok://user?uniqueId=creative_guild_games"
-                >
+                <a href="https://www.tiktok.com/@creative_guild_games" class="social-card" target="_blank" rel="noopener noreferrer">
                     <span class="social-icon" aria-hidden="true">
                         <!-- TikTok icon (simple note) -->
                         <svg viewBox="0 0 24 24" width="22" height="22" fill="currentColor">
@@ -188,14 +160,7 @@
                     </div>
                 </a>
 
-                <a
-                    href="https://www.reddit.com/r/manipulationgame"
-                    class="social-card"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    data-web-url="https://www.reddit.com/r/manipulationgame"
-                    data-app-url="reddit://r/manipulationgame"
-                >
+                <a href="https://www.reddit.com/r/manipulationgame" class="social-card" target="_blank" rel="noopener noreferrer">
                     <span class="social-icon" aria-hidden="true">
                         <!-- Reddit icon (simple) -->
                         <svg viewBox="0 0 24 24" width="22" height="22" fill="currentColor">
@@ -213,82 +178,40 @@
     </main>
 
     <footer class="site-footer">
-        <span class="site-version">v2.1</span>
+        <span class="site-version">v2.0</span>
     </footer>
 
     <script>
         (function () {
-            function isMobile() {
-                return /Mobi|Android|iPhone|iPad|iPod/i.test(navigator.userAgent || '');
-            }
-
             var emailLink = document.getElementById('email-link');
-            if (emailLink) {
-                emailLink.addEventListener('click', function (event) {
-                    event.preventDefault();
-                    var email = emailLink.getAttribute('data-email');
-                    if (!email) return;
+            if (!emailLink) return;
 
-                    var copyPromise;
-                    if (navigator.clipboard && navigator.clipboard.writeText) {
-                        copyPromise = navigator.clipboard.writeText(email);
-                    } else {
-                        copyPromise = new Promise(function (resolve, reject) {
-                            var tempInput = document.createElement('input');
-                            tempInput.value = email;
-                            document.body.appendChild(tempInput);
-                            tempInput.select();
-                            try {
-                                var successful = document.execCommand('copy');
-                                if (successful) {
-                                    resolve();
-                                } else {
-                                    reject();
-                                }
-                            } catch (e) {
-                                reject(e);
-                            }
-                            document.body.removeChild(tempInput);
-                        });
-                    }
+            emailLink.addEventListener('click', function (event) {
+                event.preventDefault();
+                var email = emailLink.getAttribute('data-email');
+                if (!email) return;
 
-                    copyPromise.then(function () {
+                if (navigator.clipboard && navigator.clipboard.writeText) {
+                    navigator.clipboard.writeText(email).then(function () {
                         alert('Email address copied to clipboard: ' + email);
-                        if (isMobile()) {
-                            window.location.href = 'mailto:' + email;
-                        }
                     }).catch(function () {
                         alert('Could not copy email automatically. You can copy it manually: ' + email);
-                        if (isMobile()) {
-                            window.location.href = 'mailto:' + email;
-                        }
                     });
-                });
-            }
-
-            if (isMobile()) {
-                var socialLinks = document.querySelectorAll('.social-card[target="_blank"][data-app-url]');
-                socialLinks.forEach(function (link) {
-                    link.addEventListener('click', function (event) {
-                        event.preventDefault();
-                        var appUrl = link.getAttribute('data-app-url');
-                        var webUrl = link.getAttribute('data-web-url') || link.href;
-                        if (!appUrl) {
-                            window.open(webUrl, '_blank');
-                            return;
-                        }
-
-                        var now = Date.now();
-                        var timeout = setTimeout(function () {
-                            if (Date.now() - now < 1500) {
-                                window.open(webUrl, '_blank');
-                            }
-                        }, 800);
-
-                        window.location.href = appUrl;
-                    });
-                });
-            }
+                } else {
+                    // Fallback for older browsers
+                    var tempInput = document.createElement('input');
+                    tempInput.value = email;
+                    document.body.appendChild(tempInput);
+                    tempInput.select();
+                    try {
+                        document.execCommand('copy');
+                        alert('Email address copied to clipboard: ' + email);
+                    } catch (e) {
+                        alert('Could not copy email automatically. You can copy it manually: ' + email);
+                    }
+                    document.body.removeChild(tempInput);
+                }
+            });
         })();
     </script>
 </body>
