@@ -249,10 +249,63 @@ body {
     margin-top: 80px;
 }
 
-/* Help Wanted form */
+/* Help Wanted form & prototype layout */
 .help-form {
     max-width: 720px;
     margin: 0 auto;
+}
+
+.apply-layout {
+    display: flex;
+    gap: 32px;
+    align-items: flex-start;
+    margin-bottom: 40px;
+}
+
+.apply-copy {
+    flex: 1;
+    max-width: 520px;
+}
+
+.apply-projects {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+}
+
+.roles-title {
+    margin-top: 32px;
+    margin-bottom: 16px;
+    text-align: left;
+}
+
+.roles-grid .project-card {
+    text-align: left;
+}
+
+.expectations-grid .project-card {
+    text-align: left;
+}
+
+.doc-pill {
+    display: inline-block;
+    margin-top: 12px;
+    padding: 6px 14px;
+    border-radius: 999px;
+    border: 1px solid rgba(255,255,255,0.6);
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    text-decoration: none;
+    background: transparent;
+    color: #ffffff;
+}
+
+.project-card:hover .doc-pill {
+    border-color: var(--accent-gold);
+    color: var(--accent-gold);
 }
 
 .google-form-embed {
@@ -424,6 +477,14 @@ body {
         justify-content: center;
         gap: 24px;
         padding-top: 10px;
+    }
+
+    .apply-layout {
+        flex-direction: column;
+    }
+
+    .roles-title {
+        text-align: center;
     }
 }
 
