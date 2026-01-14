@@ -215,25 +215,6 @@ body {
         0 10px 26px rgba(28, 49, 42, 0.6);
 }
 
-/* Deco corner notch */
-.project-card::before {
-    content: "";
-    position: absolute;
-    top: 0;
-    right: 0;
-    width: 18px;
-    height: 18px;
-    background: var(--accent-gold);
-    clip-path: polygon(100% 0, 0 0, 100% 100%);
-    opacity: 0;
-    transition: opacity 0.3s ease;
-}
-
-.project-card:hover::before,
-.project-card:focus-within::before {
-    opacity: 1;
-}
-
 /* (6) Bigger gap between project cards and contact */
 .contact-section {
     margin-top: 80px;
