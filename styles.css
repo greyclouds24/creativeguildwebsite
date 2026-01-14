@@ -273,7 +273,6 @@ body {
 .social-card--primary {
     grid-column: span 1;
     padding: 18px 18px;
-    background: rgba(255,255,255,0.08);
 }
 
 /* Make the first row bigger by spanning columns on wider screens */
