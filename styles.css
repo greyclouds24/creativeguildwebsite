@@ -45,6 +45,18 @@ body {
     gap: 32px;
 }
 
+.top-bar a,
+.top-bar a:link,
+.top-bar a:visited {
+    color: white;
+    text-decoration: none;
+}
+
+.top-bar a:hover,
+.top-bar a:active {
+    color: white;
+}
+
 .nav-item {
     position: relative;
     cursor: pointer;
