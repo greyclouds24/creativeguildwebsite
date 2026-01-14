@@ -251,6 +251,18 @@ body {
     margin: 0 auto;
 }
 
+.google-form-embed {
+    max-width: 900px;
+    margin: 0 auto;
+}
+
+.google-form-embed iframe {
+    width: 100%;
+    border: 0;
+    border-radius: 12px;
+    background: #fff;
+}
+
 .form-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));

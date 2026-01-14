@@ -42,79 +42,23 @@
         <section class="portfolio">
             <h2 class="section-title">Application Form</h2>
 
-            <form
-                class="help-form"
-                action="mailto:creativeguildllc@gmail.com"
-                method="POST"
-                enctype="text/plain"
-            >
-                <div class="form-grid">
-                    <div class="form-field">
-                        <label for="name">Name</label>
-                        <input type="text" id="name" name="Name" required />
-                    </div>
+            <p class="bio small" style="text-align:center; margin-bottom: 24px;">
+                This embedded form is powered by Google Forms. Your responses go straight to our inbox.
+            </p>
 
-                    <div class="form-field">
-                        <label for="email">Email</label>
-                        <input type="email" id="email" name="Email" required />
-                    </div>
-
-                    <div class="form-field">
-                        <label for="role">Role / How you’d like to help</label>
-                        <input
-                            type="text"
-                            id="role"
-                            name="Role"
-                            placeholder="e.g. Unity dev, 3D artist, writer, playtester"
-                            required
-                        />
-                    </div>
-
-                    <div class="form-field">
-                        <label for="portfolio">Portfolio / Links</label>
-                        <input
-                            type="url"
-                            id="portfolio"
-                            name="Portfolio"
-                            placeholder="Portfolio, itch.io, ArtStation, LinkedIn, etc."
-                        />
-                    </div>
-
-                    <div class="form-field form-field--full">
-                        <label for="experience">Experience (short summary)</label>
-                        <textarea
-                            id="experience"
-                            name="Experience"
-                            rows="4"
-                            placeholder="Tell us a bit about your background, projects you’ve worked on, and tools you’re comfortable with."
-                        ></textarea>
-                    </div>
-
-                    <div class="form-field form-field--full">
-                        <label for="interest">What interests you about Creative Guild Games?</label>
-                        <textarea
-                            id="interest"
-                            name="Interest"
-                            rows="3"
-                        ></textarea>
-                    </div>
-
-                    <div class="form-field form-field--full">
-                        <label for="availability">Availability & Rates (optional)</label>
-                        <textarea
-                            id="availability"
-                            name="Availability"
-                            rows="3"
-                            placeholder="Rough availability, time zone, and typical rates if applicable."
-                        ></textarea>
-                    </div>
-                </div>
-
-                <button type="submit" class="projects-btn form-submit-btn">
-                    <strong>Submit Application</strong>
-                    <span>Opens your email client to send details</span>
-                </button>
-            </form>
+            <!-- Replace the src URL below with your real Google Forms "Embed" URL -->
+            <div class="google-form-embed">
+                <iframe
+                    src="https://docs.google.com/forms/d/e/YOUR_GOOGLE_FORM_ID/viewform?embedded=true"
+                    width="640"
+                    height="1200"
+                    frameborder="0"
+                    marginheight="0"
+                    marginwidth="0"
+                >
+                    Loading…
+                </iframe>
+            </div>
         </section>
     </main>
 
