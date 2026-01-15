@@ -257,6 +257,7 @@ body {
     padding: 40px 50px;
     pointer-events: none; /* Allow clicks to pass through to button */
     z-index: 1;
+    background: transparent; /* Ensure no background */
 }
 
 .featured-project-left {
@@ -307,6 +308,7 @@ body {
     align-items: center;
     z-index: 2;
     pointer-events: auto; /* Re-enable clicks for button */
+    background: transparent; /* Ensure no background */
 }
 
 .project-status-featured {
@@ -662,10 +664,15 @@ body {
         padding: 20px 10px 100px; /* Extra bottom padding for button on mobile */
     }
 
+    .featured-project-image-wrapper {
+        margin-bottom: 80px; /* Add space for button on mobile */
+    }
+
     .featured-project-content {
         grid-template-columns: 1fr;
         gap: 20px;
         padding: 30px 20px;
+        background: transparent; /* Ensure no background on mobile */
     }
 
     .featured-project-title {
@@ -677,6 +684,11 @@ body {
     }
 
     .featured-project-button-wrapper {
-        bottom: -50px;
+        position: absolute;
+        bottom: -70px; /* Position well below the image on mobile */
+        left: 50%;
+        transform: translateX(-50%);
+        width: auto;
+        background: transparent; /* Ensure no background */
     }
 }
