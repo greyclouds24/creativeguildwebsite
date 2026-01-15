@@ -308,7 +308,6 @@ body {
     align-items: center;
     z-index: 2;
     pointer-events: auto; /* Re-enable clicks for button */
-    background: transparent; /* Ensure no background */
 }
 
 .project-status-featured {
@@ -333,6 +332,17 @@ body {
     color: var(--accent-green);
     transform: translateY(-2px);
     box-shadow: 0 4px 12px rgba(83, 147, 126, 0.4);
+}
+
+.project-status-featured:focus {
+    outline: 2px solid var(--accent-mint);
+    outline-offset: 2px;
+    background: transparent;
+    color: var(--accent-mint);
+}
+
+.project-status-featured:active {
+    transform: translateY(0);
 }
 
 /* Remove old button */
@@ -661,18 +671,20 @@ body {
     }
 
     .featured-project-layout {
-        padding: 20px 10px 100px; /* Extra bottom padding for button on mobile */
+        padding: 20px 10px 40px;
+        margin: 40px auto;
+        background: transparent;
     }
 
     .featured-project-image-wrapper {
-        margin-bottom: 80px; /* Add space for button on mobile */
+        background: transparent;
     }
 
     .featured-project-content {
         grid-template-columns: 1fr;
         gap: 20px;
         padding: 30px 20px;
-        background: transparent; /* Ensure no background on mobile */
+        background: transparent !important; /* Ensure no background on mobile */
     }
 
     .featured-project-title {
@@ -684,11 +696,29 @@ body {
     }
 
     .featured-project-button-wrapper {
-        position: absolute;
-        bottom: -70px; /* Position well below the image on mobile */
-        left: 50%;
-        transform: translateX(-50%);
-        width: auto;
-        background: transparent; /* Ensure no background */
+        position: static; /* Use normal flow on mobile */
+        bottom: auto;
+        left: auto;
+        transform: none;
+        margin-top: 30px; /* Space above button */
+        width: 100%;
+        display: flex;
+        justify-content: center;
+    }
+
+    .project-status-featured {
+        background: transparent !important;
+        -webkit-tap-highlight-color: transparent; /* Remove mobile tap highlight */
+    }
+
+    .project-status-featured:hover {
+        background: var(--accent-mint) !important;
+        color: var(--accent-green) !important;
+    }
+
+    .project-status-featured:active {
+        background: var(--accent-mint) !important;
+        color: var(--accent-green) !important;
+        transform: translateY(0) !important;
     }
 }
