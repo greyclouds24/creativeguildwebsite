@@ -215,69 +215,75 @@ body {
 /* Featured Project Layout */
 .featured-project-layout {
     position: relative;
-    max-width: 1100px;
-    margin: 0 auto;
-    min-height: 400px;
+    max-width: 1200px;
+    margin: 60px auto;
+    min-height: 500px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 40px;
+    align-items: center;
+    padding: 40px 20px;
 }
 
 .featured-project-image-wrapper {
     position: absolute;
-    inset: 0;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
     z-index: 0;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    width: 80%;
+    max-width: 800px;
+    pointer-events: none;
 }
 
 .featured-project-image {
-    max-width: 90%;
-    max-height: 500px;
+    width: 100%;
+    height: auto;
     object-fit: contain;
-    border-radius: 12px;
-    box-shadow: 
-        0 20px 60px rgba(0, 0, 0, 0.4),
-        0 0 0 1px rgba(255, 255, 255, 0.1);
-    filter: drop-shadow(0 10px 30px rgba(0, 0, 0, 0.5));
+    border-radius: 16px;
+    filter: drop-shadow(0 25px 80px rgba(0, 0, 0, 0.6));
+    opacity: 0.7;
 }
 
 .featured-project-content {
     position: relative;
     z-index: 1;
-    display: flex;
-    align-items: center;
-    min-height: 400px;
-    padding: 40px 20px;
-    gap: 40px;
+    display: contents;
 }
 
 .featured-project-left {
-    flex: 1;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
     text-align: center;
+    position: relative;
+    z-index: 2;
 }
 
 .featured-project-title {
-    font-size: 2.5rem;
+    font-size: 3rem;
     font-weight: 700;
-    margin-bottom: 16px;
-    letter-spacing: 0.1em;
+    margin-bottom: 24px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: #ffffff;
+    text-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
 }
 
 .project-status-featured {
     display: inline-block;
-    padding: 6px 16px;
+    padding: 8px 20px;
     border-radius: 999px;
     border: 2px solid var(--accent-gold);
     background: var(--accent-gold);
     color: var(--accent-green);
-    font-size: 0.85rem;
+    font-size: 0.9rem;
     font-weight: 700;
-    letter-spacing: 0.1em;
+    letter-spacing: 0.15em;
     text-transform: uppercase;
-    transition: border-color 0.3s ease, background 0.3s ease;
+    transition: all 0.3s ease;
+    text-shadow: none;
 }
 
 .featured-project-layout:hover .project-status-featured {
@@ -287,18 +293,21 @@ body {
 }
 
 .featured-project-right {
-    flex: 1;
     display: flex;
     align-items: center;
     justify-content: center;
     text-align: center;
+    position: relative;
+    z-index: 2;
 }
 
 .featured-project-description {
-    font-size: 1.1rem;
-    line-height: 1.6;
-    opacity: 0.9;
-    max-width: 400px;
+    font-size: 1.25rem;
+    line-height: 1.8;
+    opacity: 0.95;
+    max-width: 450px;
+    color: #ffffff;
+    text-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
 }
 
 .project-btn-featured {
@@ -312,8 +321,8 @@ body {
     background: transparent;
     color: transparent;
     cursor: pointer;
-    border-radius: 12px;
-    z-index: 2;
+    border-radius: 16px;
+    z-index: 3;
     appearance: none;
     -webkit-appearance: none;
     outline: none;
@@ -322,7 +331,7 @@ body {
 .featured-project-layout:focus-within {
     outline: 2px solid var(--accent-gold);
     outline-offset: 4px;
-    border-radius: 12px;
+    border-radius: 16px;
 }
 
 /* (4) Full-card empty button overlay:
@@ -645,11 +654,28 @@ body {
         font-size: 0.9rem;
     }
 
-    .featured-project-content {
-        flex-direction: column;
-        gap: 24px;
+    .featured-project-layout {
+        grid-template-columns: 1fr;
+        gap: 30px;
         min-height: auto;
-        padding: 20px 0;
+        margin: 40px auto;
+        padding: 30px 20px;
+    }
+
+    .featured-project-image-wrapper {
+        position: relative;
+        top: auto;
+        left: auto;
+        transform: none;
+        width: 100%;
+        max-width: none;
+        margin-bottom: 20px;
+        order: -1;
+    }
+
+    .featured-project-image {
+        opacity: 0.8;
+        filter: drop-shadow(0 15px 50px rgba(0, 0, 0, 0.6));
     }
 
     .featured-project-left,
@@ -661,8 +687,7 @@ body {
         font-size: 2rem;
     }
 
-    .featured-project-image {
-        max-width: 100%;
-        max-height: 350px;
+    .featured-project-description {
+        font-size: 1.1rem;
     }
 }
