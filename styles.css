@@ -18,78 +18,6 @@ body {
     font-family: "Segoe UI", sans-serif;
     background: linear-gradient(180deg, var(--bg-mid), var(--bg-dark));
     color: white;
-    position: relative;
-    overflow-x: hidden;
-}
-
-/* Art Deco decorative background elements */
-.artdeco-bg {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    pointer-events: none;
-    z-index: 0;
-    overflow: hidden;
-}
-
-.artdeco-svg {
-    position: absolute;
-    opacity: 0.15;
-    transition: opacity 0.3s ease, transform 0.1s ease-out;
-}
-
-.artdeco-1 {
-    top: 10%;
-    right: 5%;
-    width: 400px;
-    height: 400px;
-}
-
-.artdeco-2 {
-    top: 50%;
-    left: 3%;
-    width: 300px;
-    height: 300px;
-    transform: rotate(-15deg);
-}
-
-.artdeco-3 {
-    bottom: 15%;
-    right: 8%;
-    width: 250px;
-    height: 250px;
-    transform: rotate(25deg);
-}
-
-.artdeco-path,
-.artdeco-circle {
-    fill: none;
-    stroke-linecap: round;
-    stroke-linejoin: round;
-}
-
-/* Scroll reveal animations */
-.scroll-reveal {
-    opacity: 0;
-    transform: translateY(30px);
-    transition: opacity 0.8s ease-out, transform 0.8s ease-out;
-}
-
-.scroll-reveal.revealed {
-    opacity: 1;
-    transform: translateY(0);
-}
-
-/* Interactive hover effects on Art Deco elements */
-@media (hover: hover) {
-    .profile-section:hover ~ .artdeco-bg .artdeco-1,
-    .portfolio:hover ~ .artdeco-bg .artdeco-2,
-    .contact-section:hover ~ .artdeco-bg .artdeco-3 {
-        opacity: 0.25;
-        transform: scale(1.05);
-    }
 }
 
 /* Top Bar */
@@ -185,8 +113,6 @@ body {
     display: flex;
     flex-direction: column;
     align-items: center;
-    position: relative;
-    z-index: 1;
 }
 
 /* Keep sections from stretching weirdly when container is flex */
@@ -204,13 +130,6 @@ body {
     padding: 10px 16px;
     border-radius: 12px;
     margin-bottom: 14px;
-    position: relative;
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
-}
-
-.title-bordered:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(83, 147, 126, 0.3);
 }
 
 /* Ensure profile section stays nice */
@@ -256,31 +175,6 @@ body {
 
     /* (5) Center header + paragraph text in each card */
     text-align: center;
-    opacity: 0;
-    transform: translateY(20px) scale(0.95);
-}
-
-.scroll-reveal.revealed .project-card {
-    animation: cardReveal 0.6s ease-out forwards;
-}
-
-.scroll-reveal.revealed .project-card:nth-child(1) {
-    animation-delay: 0.1s;
-}
-
-.scroll-reveal.revealed .project-card:nth-child(2) {
-    animation-delay: 0.2s;
-}
-
-.scroll-reveal.revealed .project-card:nth-child(3) {
-    animation-delay: 0.3s;
-}
-
-@keyframes cardReveal {
-    to {
-        opacity: 1;
-        transform: translateY(0) scale(1);
-    }
 }
 
 .project-card:hover {
@@ -605,23 +499,6 @@ body {
     }
 }
 
-@media (max-width: 900px) {
-    .artdeco-svg {
-        opacity: 0.08;
-    }
-
-    .artdeco-1 {
-        width: 250px;
-        height: 250px;
-    }
-
-    .artdeco-2,
-    .artdeco-3 {
-        width: 200px;
-        height: 200px;
-    }
-}
-
 @media (max-width: 600px) {
     .top-bar-inner {
         padding: 16px 20px;
@@ -645,8 +522,6 @@ body {
 
     .project-card {
         padding: 24px;
-        opacity: 1;
-        transform: none;
     }
 
     .project-card h3 {
@@ -655,14 +530,5 @@ body {
 
     .project-card p {
         font-size: 0.9rem;
-    }
-
-    .artdeco-svg {
-        display: none;
-    }
-
-    .scroll-reveal {
-        opacity: 1;
-        transform: none;
     }
 }
