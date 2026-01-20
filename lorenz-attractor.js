@@ -2,10 +2,20 @@
 class LorenzAttractor {
     constructor(canvasId) {
         this.canvas = document.getElementById(canvasId);
-        if (!this.canvas) return;
+        if (!this.canvas) {
+            console.error('Canvas element not found:', canvasId);
+            this.initialized = false;
+            return;
+        }
         
         this.ctx = this.canvas.getContext('2d');
-        this.resize();
+        if (!this.ctx) {
+            console.error('Could not get 2D context from canvas');
+            this.initialized = false;
+            return;
+        }
+        
+        this.initialized = true;
         
         // Lorenz system parameters (classic values)
         this.sigma = 10;
@@ -17,22 +27,22 @@ class LorenzAttractor {
         
         // Multiple particles for better visualization
         this.particles = [];
-        this.numParticles = 500;
-        this.maxTrailLength = 100;
+        this.numParticles = 300; // Reduced for better performance
+        this.maxTrailLength = 150;
         
-        // Initialize particles with slight variations
+        // Initialize particles with slight variations - start near attractor
         for (let i = 0; i < this.numParticles; i++) {
             this.particles.push({
-                x: (Math.random() - 0.5) * 20,
-                y: (Math.random() - 0.5) * 20,
-                z: (Math.random() - 0.5) * 20,
+                x: (Math.random() - 0.5) * 30 + 5, // Start closer to attractor
+                y: (Math.random() - 0.5) * 30 + 5,
+                z: (Math.random() - 0.5) * 30 + 10,
                 trail: [],
                 hue: (i * 137.508) % 360 // Golden angle for color distribution
             });
         }
         
         // Scale and translation for 2D projection
-        this.scale = 8;
+        this.scale = 10;
         this.centerX = 0;
         this.centerY = 0;
         this.centerZ = 0;
@@ -42,6 +52,9 @@ class LorenzAttractor {
         this.angleY = 0;
         this.rotationSpeed = 0.001;
         
+        // Resize must happen after particles are initialized
+        this.resize();
+        
         // Setup resize handler
         window.addEventListener('resize', () => this.resize());
         
@@ -50,11 +63,22 @@ class LorenzAttractor {
     }
     
     resize() {
-        if (!this.canvas) return;
-        this.canvas.width = window.innerWidth;
-        this.canvas.height = window.innerHeight;
-        this.centerX = this.canvas.width / 2;
-        this.centerY = this.canvas.height / 2;
+        if (!this.canvas || !this.ctx) return;
+        const dpr = window.devicePixelRatio || 1;
+        const width = window.innerWidth;
+        const height = window.innerHeight;
+        
+        // Set internal canvas size (for drawing)
+        this.canvas.width = width * dpr;
+        this.canvas.height = height * dpr;
+        
+        // Scale context to account for device pixel ratio
+        this.ctx.scale(dpr, dpr);
+        
+        // Set display size (CSS pixels) - no need, CSS already handles this
+        // Center point in display coordinates
+        this.centerX = width / 2;
+        this.centerY = height / 2;
     }
     
     // Lorenz differential equations
@@ -172,17 +196,19 @@ class LorenzAttractor {
     
     draw() {
         // Clear with semi-transparent overlay for trail effect
-        this.ctx.fillStyle = 'rgba(49, 28, 35, 0.1)'; // Slight fade
+        this.ctx.fillStyle = 'rgba(49, 28, 35, 0.05)'; // Lighter fade for smoother trails
         this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
         
         // Draw particles and trails
         this.particles.forEach(particle => {
             if (particle.trail.length < 2) return;
             
-            // Draw trail
+            // Draw trail with gradient effect
             this.ctx.beginPath();
-            this.ctx.strokeStyle = `hsla(${particle.hue}, 70%, 60%, 0.15)`;
+            this.ctx.strokeStyle = `hsla(${particle.hue}, 70%, 60%, 0.25)`;
             this.ctx.lineWidth = 1.5;
+            this.ctx.lineCap = 'round';
+            this.ctx.lineJoin = 'round';
             
             const firstPoint = particle.trail[0];
             this.ctx.moveTo(firstPoint.x, firstPoint.y);
@@ -196,25 +222,55 @@ class LorenzAttractor {
             
             // Draw current particle position
             const current = particle.trail[particle.trail.length - 1];
-            this.ctx.fillStyle = `hsla(${particle.hue}, 80%, 70%, 0.4)`;
-            this.ctx.beginPath();
-            this.ctx.arc(current.x, current.y, 2, 0, Math.PI * 2);
-            this.ctx.fill();
+            if (current && current.x >= 0 && current.x <= this.canvas.width && 
+                current.y >= 0 && current.y <= this.canvas.height) {
+                this.ctx.fillStyle = `hsla(${particle.hue}, 80%, 70%, 0.5)`;
+                this.ctx.beginPath();
+                this.ctx.arc(current.x, current.y, 2.5, 0, Math.PI * 2);
+                this.ctx.fill();
+            }
         });
     }
     
     animate() {
+        if (!this.initialized || !this.canvas || !this.ctx) return;
         this.update();
         this.draw();
         requestAnimationFrame(() => this.animate());
     }
     
     start() {
+        if (!this.initialized) {
+            console.error('Cannot start Lorenz attractor - not initialized');
+            return;
+        }
         this.animate();
     }
 }
 
 // Initialize when DOM is ready
-document.addEventListener('DOMContentLoaded', () => {
-    new LorenzAttractor('lorenz-canvas');
-});
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initLorenz);
+} else {
+    // DOM is already ready
+    initLorenz();
+}
+
+function initLorenz() {
+    const canvas = document.getElementById('lorenz-canvas');
+    if (canvas) {
+        try {
+            const attractor = new LorenzAttractor('lorenz-canvas');
+            // Verify it initialized
+            if (attractor && attractor.canvas) {
+                console.log('Lorenz attractor initialized successfully');
+            }
+        } catch (error) {
+            console.error('Error initializing Lorenz attractor:', error);
+        }
+    } else {
+        console.error('Lorenz canvas not found');
+        // Retry after a short delay
+        setTimeout(initLorenz, 100);
+    }
+}

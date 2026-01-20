@@ -16,10 +16,11 @@
 
 body {
     font-family: "Segoe UI", sans-serif;
-    background: linear-gradient(180deg, var(--bg-mid), var(--bg-dark));
+    background: var(--bg-dark);
     color: white;
     position: relative;
     overflow-x: hidden;
+    min-height: 100vh;
 }
 
 /* Lorenz Attractor Background */
@@ -27,11 +28,35 @@ body {
     position: fixed;
     top: 0;
     left: 0;
-    width: 100%;
-    height: 100%;
-    z-index: -1;
+    width: 100vw;
+    height: 100vh;
+    z-index: 0;
     pointer-events: none;
-    opacity: 0.6;
+    display: block;
+    background: linear-gradient(180deg, var(--bg-mid), var(--bg-dark));
+}
+
+/* Overlay gradient to blend attractor with background */
+body::before {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: linear-gradient(180deg, 
+        rgba(98, 55, 69, 0.7) 0%,
+        rgba(49, 28, 35, 0.85) 100%);
+    z-index: 0;
+    pointer-events: none;
+}
+
+/* Ensure content appears above the canvas */
+.top-bar,
+.container,
+.site-footer {
+    position: relative;
+    z-index: 1;
 }
 
 /* Top Bar */
