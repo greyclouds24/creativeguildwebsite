@@ -18,6 +18,20 @@ body {
     font-family: "Segoe UI", sans-serif;
     background: linear-gradient(180deg, var(--bg-mid), var(--bg-dark));
     color: white;
+    position: relative;
+    overflow-x: hidden;
+}
+
+/* Lorenz Attractor Background */
+.lorenz-background {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
+    pointer-events: none;
+    opacity: 0.6;
 }
 
 /* Top Bar */
