@@ -55,6 +55,8 @@ class LorenzAttractor {
         this.centerX = 0;
         this.centerY = 0;
         this.centerZ = 0;
+        this.displayWidth = window.innerWidth;
+        this.displayHeight = window.innerHeight;
         
         // Animation (slowed down to 20% speed)
         this.angleX = 0;
@@ -74,20 +76,19 @@ class LorenzAttractor {
     resize() {
         if (!this.canvas || !this.ctx) return;
         const dpr = window.devicePixelRatio || 1;
-        const width = window.innerWidth;
-        const height = window.innerHeight;
+        this.displayWidth = window.innerWidth;
+        this.displayHeight = window.innerHeight;
         
         // Set internal canvas size (for drawing)
-        this.canvas.width = width * dpr;
-        this.canvas.height = height * dpr;
+        this.canvas.width = this.displayWidth * dpr;
+        this.canvas.height = this.displayHeight * dpr;
         
         // Scale context to account for device pixel ratio
         this.ctx.scale(dpr, dpr);
         
-        // Set display size (CSS pixels) - no need, CSS already handles this
-        // Center point in display coordinates
-        this.centerX = width / 2;
-        this.centerY = height / 2;
+        // Center point in display coordinates (used for drawing)
+        this.centerX = this.displayWidth / 2;
+        this.centerY = this.displayHeight / 2;
     }
     
     // Lorenz differential equations
@@ -198,9 +199,9 @@ class LorenzAttractor {
     }
     
     draw() {
-        // Clear with semi-transparent overlay
+        // Clear with semi-transparent overlay (use display dimensions since context is scaled)
         this.ctx.fillStyle = 'rgba(49, 28, 35, 0.1)';
-        this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
+        this.ctx.fillRect(0, 0, this.displayWidth, this.displayHeight);
         
         // Draw particles only (no trails) - smaller and more numerous
         this.particles.forEach(particle => {
@@ -208,11 +209,16 @@ class LorenzAttractor {
             
             const pos = particle.current;
             
-            // Only draw if particle is visible on screen
-            if (pos.x >= -50 && pos.x <= this.canvas.width + 50 && 
-                pos.y >= -50 && pos.y <= this.canvas.height + 50) {
-                // Use website color scheme
-                this.ctx.fillStyle = this.colors[particle.colorIndex] + 'CC'; // Add opacity (80%)
+            // Only draw if particle is visible on screen (use display dimensions)
+            if (pos.x >= -50 && pos.x <= this.displayWidth + 50 && 
+                pos.y >= -50 && pos.y <= this.displayHeight + 50) {
+                // Use website color scheme with rgba for opacity
+                const color = this.colors[particle.colorIndex];
+                // Convert hex to rgba
+                const r = parseInt(color.slice(1, 3), 16);
+                const g = parseInt(color.slice(3, 5), 16);
+                const b = parseInt(color.slice(5, 7), 16);
+                this.ctx.fillStyle = `rgba(${r}, ${g}, ${b}, 0.8)`;
                 this.ctx.beginPath();
                 this.ctx.arc(pos.x, pos.y, 1.5, 0, Math.PI * 2); // Smaller particles
                 this.ctx.fill();
