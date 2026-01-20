@@ -30,7 +30,7 @@ body {
     left: 0;
     width: 100vw;
     height: 100vh;
-    z-index: 0;
+    z-index: -1;
     pointer-events: none;
     display: block;
     background: linear-gradient(180deg, var(--bg-mid), var(--bg-dark));
@@ -47,20 +47,14 @@ body::before {
     background: linear-gradient(180deg, 
         rgba(98, 55, 69, 0.7) 0%,
         rgba(49, 28, 35, 0.85) 100%);
-    z-index: 0;
+    z-index: -1;
     pointer-events: none;
-}
-
-/* Ensure content appears above the canvas */
-.top-bar,
-.container,
-.site-footer {
-    position: relative;
-    z-index: 1;
 }
 
 /* Top Bar */
 .top-bar {
+    position: relative;
+    z-index: 10;
     background: var(--accent-green);
     border-bottom: 1px solid rgba(255,255,255,0.08);
 }
@@ -144,6 +138,8 @@ body::before {
 
 /* Portfolio */
 .container {
+    position: relative;
+    z-index: 1;
     max-width: 1200px;
     margin: 0 auto 80px;
     padding: 40px 32px;
@@ -627,6 +623,8 @@ body::before {
 
 /* Footer */
 .site-footer {
+    position: relative;
+    z-index: 1;
     padding: 24px 0 18px;
     text-align: center;
     opacity: 0.45;

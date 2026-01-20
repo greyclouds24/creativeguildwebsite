@@ -27,8 +27,7 @@ class LorenzAttractor {
         
         // Multiple particles for better visualization
         this.particles = [];
-        this.numParticles = 300; // Reduced for better performance
-        this.maxTrailLength = 150;
+        this.numParticles = 400; // Can have more without trails
         
         // Initialize particles with slight variations - start near attractor
         for (let i = 0; i < this.numParticles; i++) {
@@ -36,7 +35,7 @@ class LorenzAttractor {
                 x: (Math.random() - 0.5) * 30 + 5, // Start closer to attractor
                 y: (Math.random() - 0.5) * 30 + 5,
                 z: (Math.random() - 0.5) * 30 + 10,
-                trail: [],
+                current: null,
                 hue: (i * 137.508) % 360 // Golden angle for color distribution
             });
         }
@@ -183,50 +182,28 @@ class LorenzAttractor {
             // Integrate Lorenz equations
             this.rk4(particle);
             
-            // Project to 2D and add to trail
-            const projected = this.project3D(particle.x, particle.y, particle.z);
-            particle.trail.push(projected);
-            
-            // Limit trail length
-            if (particle.trail.length > this.maxTrailLength) {
-                particle.trail.shift();
-            }
+            // Project to 2D and store current position (no trail)
+            particle.current = this.project3D(particle.x, particle.y, particle.z);
         });
     }
     
     draw() {
-        // Clear with semi-transparent overlay for trail effect
-        this.ctx.fillStyle = 'rgba(49, 28, 35, 0.05)'; // Lighter fade for smoother trails
+        // Clear with semi-transparent overlay
+        this.ctx.fillStyle = 'rgba(49, 28, 35, 0.1)';
         this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
         
-        // Draw particles and trails
+        // Draw particles only (no trails)
         this.particles.forEach(particle => {
-            if (particle.trail.length < 2) return;
+            if (!particle.current) return;
             
-            // Draw trail with gradient effect
-            this.ctx.beginPath();
-            this.ctx.strokeStyle = `hsla(${particle.hue}, 70%, 60%, 0.25)`;
-            this.ctx.lineWidth = 1.5;
-            this.ctx.lineCap = 'round';
-            this.ctx.lineJoin = 'round';
+            const pos = particle.current;
             
-            const firstPoint = particle.trail[0];
-            this.ctx.moveTo(firstPoint.x, firstPoint.y);
-            
-            for (let i = 1; i < particle.trail.length; i++) {
-                const point = particle.trail[i];
-                this.ctx.lineTo(point.x, point.y);
-            }
-            
-            this.ctx.stroke();
-            
-            // Draw current particle position
-            const current = particle.trail[particle.trail.length - 1];
-            if (current && current.x >= 0 && current.x <= this.canvas.width && 
-                current.y >= 0 && current.y <= this.canvas.height) {
-                this.ctx.fillStyle = `hsla(${particle.hue}, 80%, 70%, 0.5)`;
+            // Only draw if particle is visible on screen
+            if (pos.x >= -50 && pos.x <= this.canvas.width + 50 && 
+                pos.y >= -50 && pos.y <= this.canvas.height + 50) {
+                this.ctx.fillStyle = `hsla(${particle.hue}, 75%, 65%, 0.6)`;
                 this.ctx.beginPath();
-                this.ctx.arc(current.x, current.y, 2.5, 0, Math.PI * 2);
+                this.ctx.arc(pos.x, pos.y, 3, 0, Math.PI * 2);
                 this.ctx.fill();
             }
         });
