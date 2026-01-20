@@ -25,9 +25,19 @@ class LorenzAttractor {
         // Time step for numerical integration
         this.dt = 0.01;
         
+        // Website color scheme (mint, gold, and variations)
+        this.colors = [
+            '#53937E', // accent-mint
+            '#DEB866', // accent-gold
+            '#7AB8A0', // lighter mint
+            '#F5D08A', // lighter gold
+            '#5DAE8B', // medium mint
+            '#E8C97A'  // medium gold
+        ];
+        
         // Multiple particles for better visualization
         this.particles = [];
-        this.numParticles = 400; // Can have more without trails
+        this.numParticles = 800; // Increased count
         
         // Initialize particles with slight variations - start near attractor
         for (let i = 0; i < this.numParticles; i++) {
@@ -36,20 +46,20 @@ class LorenzAttractor {
                 y: (Math.random() - 0.5) * 30 + 5,
                 z: (Math.random() - 0.5) * 30 + 10,
                 current: null,
-                hue: (i * 137.508) % 360 // Golden angle for color distribution
+                colorIndex: i % this.colors.length // Cycle through website colors
             });
         }
         
-        // Scale and translation for 2D projection
-        this.scale = 10;
+        // Scale and translation for 2D projection (20% bigger)
+        this.scale = 12;
         this.centerX = 0;
         this.centerY = 0;
         this.centerZ = 0;
         
-        // Animation
+        // Animation (slowed down to 20% speed)
         this.angleX = 0;
         this.angleY = 0;
-        this.rotationSpeed = 0.001;
+        this.rotationSpeed = 0.0002;
         
         // Resize must happen after particles are initialized
         this.resize();
@@ -192,7 +202,7 @@ class LorenzAttractor {
         this.ctx.fillStyle = 'rgba(49, 28, 35, 0.1)';
         this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
         
-        // Draw particles only (no trails)
+        // Draw particles only (no trails) - smaller and more numerous
         this.particles.forEach(particle => {
             if (!particle.current) return;
             
@@ -201,9 +211,10 @@ class LorenzAttractor {
             // Only draw if particle is visible on screen
             if (pos.x >= -50 && pos.x <= this.canvas.width + 50 && 
                 pos.y >= -50 && pos.y <= this.canvas.height + 50) {
-                this.ctx.fillStyle = `hsla(${particle.hue}, 75%, 65%, 0.6)`;
+                // Use website color scheme
+                this.ctx.fillStyle = this.colors[particle.colorIndex] + 'CC'; // Add opacity (80%)
                 this.ctx.beginPath();
-                this.ctx.arc(pos.x, pos.y, 3, 0, Math.PI * 2);
+                this.ctx.arc(pos.x, pos.y, 1.5, 0, Math.PI * 2); // Smaller particles
                 this.ctx.fill();
             }
         });
