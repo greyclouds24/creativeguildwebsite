@@ -187,11 +187,12 @@ body::before {
 .section-title {
     text-align: center;
     margin-bottom: 40px;
+    color: var(--bg-dark);
 }
 
 .tiny-play-btn {
     display: inline-block;
-    margin: 2px 0 14px;
+    margin: 0;
     padding: 2px 8px;
     font-size: 0.62rem;
     letter-spacing: 0.06em;
@@ -202,6 +203,13 @@ body::before {
     color: #ffffff;
     background: rgba(0, 0, 0, 0.2);
     opacity: 0.85;
+}
+
+.bottom-autotest {
+    width: 100%;
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 18px;
 }
 
 .tiny-play-btn:visited {
