@@ -205,11 +205,28 @@ body::before {
     opacity: 0.85;
 }
 
-.bottom-autotest {
+.bottom-beta-banner {
     width: 100%;
     display: flex;
-    justify-content: flex-end;
-    margin-top: 18px;
+    justify-content: center;
+    align-items: center;
+    margin-top: clamp(72px, 10vw, 120px);
+    margin-bottom: 0.35rem;
+}
+
+.tiny-play-btn--beta {
+    padding: 1px 6px;
+    font-size: 0.54rem;
+    letter-spacing: 0.05em;
+    opacity: 0.9;
+}
+
+.page-our-games .container {
+    margin-bottom: 12px;
+}
+
+.page-our-games .site-footer {
+    padding-top: 10px;
 }
 
 .tiny-play-btn:visited {
