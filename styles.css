@@ -204,6 +204,10 @@ body::before {
     opacity: 0.85;
 }
 
+.tiny-play-btn:visited {
+    color: #ffffff;
+}
+
 .tiny-play-btn:hover {
     border-color: var(--accent-gold);
     color: var(--accent-gold);
