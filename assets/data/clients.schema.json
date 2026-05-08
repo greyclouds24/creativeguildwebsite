@@ -1,0 +1,25 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "cg-clients-full",
+  "title": "Creative Guild client list (full snapshot)",
+  "type": "object",
+  "additionalProperties": {
+    "type": "object",
+    "description": "Single client record keyed by internal id",
+    "additionalProperties": true,
+    "properties": {
+      "_sync": {
+        "type": "object",
+        "description": "Merge metadata (Godot ClientSyncMeta)",
+        "properties": {
+          "updated_at": { "type": "integer" },
+          "updated_by": { "type": "string" },
+          "field_versions": { "type": "object", "additionalProperties": { "type": "integer" } }
+        }
+      },
+      "services": { "type": "array", "items": { "type": "string" } },
+      "tags": { "type": "array", "items": { "type": "string" } },
+      "contact_info": { "type": "object", "additionalProperties": true }
+    }
+  }
+}

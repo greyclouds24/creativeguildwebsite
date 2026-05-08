@@ -14,3 +14,8 @@ Suggested export flow:
 
 After exporting, open:
 - mvp-auto.html
+
+Client list snapshot (published to the site):
+- Run from website repo root: npm run import-clients-from-godot
+  Copies Godot userdata example_client_list_full.json -> assets/data/clients_full.json
+- npm run validate-client-json

@@ -19,7 +19,11 @@
     "add-all": "npm run add-blog && npm run add-books && npm run add-pics",
     "deploy-all": "npm run add-all && git push",
     
-    "parse-and-deploy": "npm run parse-all && npm run deploy-all"
+    "parse-and-deploy": "npm run parse-all && npm run deploy-all",
+
+    "import-clients-from-godot": "node scripts/import-clients-from-godot-userdata.mjs",
+    "export-clients-to-godot": "node scripts/export-clients-to-godot-userdata.mjs",
+    "validate-client-json": "node scripts/validate-client-json.mjs"
   },
   "keywords": [
     "portfolio",
