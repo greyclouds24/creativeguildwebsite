@@ -15,7 +15,8 @@ Suggested export flow:
 After exporting, open:
 - mvp-auto.html
 
-Client list snapshot (published to the site):
-- Run from website repo root: npm run import-clients-from-godot
-  Copies Godot userdata example_client_list_full.json -> assets/data/clients_full.json
-- npm run validate-client-json
+Client list (browser build):
+- Ships inside the Godot Web export as res://web_clients_full.json in the project root.
+- Before exporting Web: copy your latest clients snapshot into the Godot project:
+  web_clients_full.json (from assets/data/clients_full.json or your generator).
+- Site JSON (assets/data/clients_full.json) is optional; the game no longer downloads it.
