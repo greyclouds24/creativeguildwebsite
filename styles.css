@@ -189,6 +189,27 @@ body::before {
     margin-bottom: 40px;
 }
 
+.tiny-play-btn {
+    display: inline-block;
+    margin: 2px 0 14px;
+    padding: 2px 8px;
+    font-size: 0.62rem;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    text-decoration: none;
+    border-radius: 999px;
+    border: 1px solid rgba(255, 255, 255, 0.45);
+    color: #ffffff;
+    background: rgba(0, 0, 0, 0.2);
+    opacity: 0.85;
+}
+
+.tiny-play-btn:hover {
+    border-color: var(--accent-gold);
+    color: var(--accent-gold);
+    opacity: 1;
+}
+
 .projects-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
