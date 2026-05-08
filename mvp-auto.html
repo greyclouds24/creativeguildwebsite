@@ -19,6 +19,14 @@
             background: #000;
         }
 
+        @media (max-width: 768px) {
+            .game-frame {
+                /* Give mobile screens more vertical room for gameplay UI. */
+                aspect-ratio: 9 / 16;
+                min-height: 78vh;
+            }
+        }
+
     </style>
 </head>
 <body>
