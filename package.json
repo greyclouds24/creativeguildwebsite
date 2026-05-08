@@ -23,7 +23,9 @@
 
     "import-clients-from-godot": "node scripts/import-clients-from-godot-userdata.mjs",
     "export-clients-to-godot": "node scripts/export-clients-to-godot-userdata.mjs",
-    "validate-client-json": "node scripts/validate-client-json.mjs"
+    "validate-client-json": "node scripts/validate-client-json.mjs",
+    "check-client-json-size": "node scripts/shard-clients-json.mjs --check",
+    "shard-clients": "node scripts/shard-clients-json.mjs"
   },
   "keywords": [
     "portfolio",

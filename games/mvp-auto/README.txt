@@ -16,7 +16,8 @@ After exporting, open:
 - mvp-auto.html
 
 Client list (browser build):
-- Ships inside the Godot Web export as res://web_clients_full.json in the project root.
-- Before exporting Web: copy your latest clients snapshot into the Godot project:
-  web_clients_full.json (from assets/data/clients_full.json or your generator).
-- Site JSON (assets/data/clients_full.json) is optional; the game no longer downloads it.
+- Prefer res://web_clients_manifest.json + web_clients_shard_*.json (built from website:
+  npm run shard-clients).
+- If manifest is missing, the game falls back to res://web_clients_full.json, then demo JSON.
+- Keep assets/data/clients_full.json as source; run shard-clients before Web export when the
+  monolith is too large.

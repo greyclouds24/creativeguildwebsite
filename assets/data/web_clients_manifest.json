@@ -1,0 +1,10 @@
+{
+  "version": 1,
+  "source": "clients_full.json",
+  "max_shard_bytes": 2097152,
+  "shards": [
+    "client_shards/clients_shard_000.json",
+    "client_shards/clients_shard_001.json",
+    "client_shards/clients_shard_002.json"
+  ]
+}
