@@ -6,14 +6,51 @@
 	<title>Creative Guild Games — Space Adventure One</title>
 	<link rel="stylesheet" href="styles.css" />
 	<style>
-		.playtest-wrap { margin-top: 1.5rem; }
-		.playtest-wrap iframe {
+		/* Wider stage than default .container for a landscape game embed */
+		main.sa-playtest-main {
+			max-width: none;
+			width: 100%;
+			box-sizing: border-box;
+			padding: 0 1rem 2rem;
+		}
+		.sa-playtest-stage {
+			width: min(96vw, 1680px);
+			margin: 0.75rem auto 0;
+		}
+		.sa-playtest-toolbar {
+			display: flex;
+			justify-content: flex-end;
+			align-items: center;
+			gap: 0.5rem;
+			margin-bottom: 0.5rem;
+		}
+		.sa-playtest-toolbar button {
+			font: inherit;
+			cursor: pointer;
+			padding: 0.45rem 1rem;
+			border-radius: 6px;
+			border: 1px solid rgba(255, 255, 255, 0.25);
+			background: rgba(255, 255, 255, 0.08);
+			color: inherit;
+		}
+		.sa-playtest-toolbar button:hover {
+			background: rgba(255, 255, 255, 0.14);
+		}
+		.sa-playtest-frame {
+			position: relative;
+			width: 100%;
+			border-radius: 10px;
+			overflow: hidden;
+			border: 1px solid rgba(255, 255, 255, 0.12);
+			background: #0a0a0f;
+			min-height: min(82vh, 960px);
+		}
+		.sa-playtest-frame iframe {
 			display: block;
 			width: 100%;
-			min-height: min(720px, 85vh);
-			border: 1px solid rgba(255, 255, 255, 0.12);
-			border-radius: 8px;
-			background: #0a0a0f;
+			min-height: min(82vh, 960px);
+			border: 0;
+			vertical-align: top;
 		}
 	</style>
 </head>
@@ -40,23 +77,69 @@
 		</div>
 	</header>
 
-	<main class="container">
+	<main class="container sa-playtest-main">
 		<section class="profile-section">
 			<h1 class="title-bordered">Space Adventure One</h1>
 			<p class="subtitle">In-browser preview</p>
 		</section>
 
-		<section class="playtest-wrap">
-			<iframe
-				src="./games/space-adventure-one/index.html"
-				title="Space Adventure One"
-				allow="autoplay; fullscreen; gamepad"
-			></iframe>
+		<section class="sa-playtest-stage" aria-label="Game embed">
+			<div class="sa-playtest-toolbar">
+				<button type="button" id="sa1-fullscreen">Fullscreen</button>
+			</div>
+			<div class="sa-playtest-frame">
+				<iframe
+					id="sa1-game-iframe"
+					src="./games/space-adventure-one/index.html"
+					title="Space Adventure One"
+					allow="autoplay; fullscreen; gamepad"
+					allowfullscreen
+				></iframe>
+			</div>
 		</section>
 	</main>
 
 	<footer class="site-footer">
-		<span class="site-version">v3.0</span>
+		<span class="site-version">v3.2</span>
 	</footer>
+
+	<script>
+		(function () {
+			var frame = document.getElementById("sa1-game-iframe");
+			var btn = document.getElementById("sa1-fullscreen");
+			if (!frame || !btn) return;
+
+			function isFs() {
+				return !!(document.fullscreenElement || document.webkitFullscreenElement);
+			}
+
+			function syncLabel() {
+				btn.textContent = isFs() ? "Exit fullscreen" : "Fullscreen";
+			}
+
+			btn.addEventListener("click", function () {
+				if (!isFs()) {
+					var el = frame;
+					var req =
+						el.requestFullscreen ||
+						el.webkitRequestFullscreen ||
+						el.mozRequestFullScreen ||
+						el.msRequestFullscreen;
+					if (req) req.call(el);
+				} else {
+					var ex =
+						document.exitFullscreen ||
+						document.webkitExitFullscreen ||
+						document.mozCancelFullScreen ||
+						document.msExitFullscreen;
+					if (ex) ex.call(document);
+				}
+			});
+
+			document.addEventListener("fullscreenchange", syncLabel);
+			document.addEventListener("webkitfullscreenchange", syncLabel);
+			syncLabel();
+		})();
+	</script>
 </body>
 </html>
