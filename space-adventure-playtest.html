@@ -3,7 +3,7 @@
 <head>
 	<meta charset="UTF-8" />
 	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-	<title>Creative Guild Games — Space Adventure One (playtest)</title>
+	<title>Creative Guild Games — Space Adventure One</title>
 	<link rel="stylesheet" href="styles.css" />
 	<style>
 		.playtest-wrap { margin-top: 1.5rem; }
@@ -15,7 +15,6 @@
 			border-radius: 8px;
 			background: #0a0a0f;
 		}
-		.playtest-note { font-size: 0.95rem; opacity: 0.9; margin-bottom: 0.75rem; }
 	</style>
 </head>
 <body>
@@ -44,21 +43,13 @@
 	<main class="container">
 		<section class="profile-section">
 			<h1 class="title-bordered">Space Adventure One</h1>
-			<p class="subtitle">Web playtest (WebSocket multiplayer)</p>
-			<p class="bio">
-				The embedded build connects to a <strong>wss://</strong> dedicated server (for example via Cloudflare Tunnel).
-				Serve this page over HTTPS and set the game export’s <code>websocket_url</code> to that host, or use a desktop
-				build with <code>--websocket=wss://your-host</code>. See <code>PLAYTEST_SERVER.md</code> in the game repo.
-			</p>
+			<p class="subtitle">In-browser preview</p>
 		</section>
 
 		<section class="playtest-wrap">
-			<p class="playtest-note">
-				Game (Godot HTML5 export): <code>./games/space-adventure-one/index.html</code>
-			</p>
 			<iframe
 				src="./games/space-adventure-one/index.html"
-				title="Space Adventure One web build"
+				title="Space Adventure One"
 				allow="autoplay; fullscreen; gamepad"
 			></iframe>
 		</section>
