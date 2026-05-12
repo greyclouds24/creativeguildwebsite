@@ -90,7 +90,7 @@
 			<div class="sa-playtest-frame">
 				<iframe
 					id="sa1-game-iframe"
-					src="about:blank"
+					src="./games/space-adventure-one/index.html"
 					title="Space Adventure One"
 					allow="autoplay; fullscreen; gamepad"
 					allowfullscreen
@@ -100,22 +100,14 @@
 	</main>
 
 	<footer class="site-footer">
-		<span class="site-version">v3.6</span>
+		<span class="site-version">v3.5</span>
 	</footer>
 
 	<script>
 		(function () {
-			// Cloudflare tunnel public hostname → wss:// (must match Zero Trust "Published application" host).
-			var SPACE_ADVENTURE_SERVER_WSS = "wss://scaplaytest.creativeguildgames.com";
-
 			var frame = document.getElementById("sa1-game-iframe");
 			var btn = document.getElementById("sa1-fullscreen");
 			if (!frame || !btn) return;
-
-			var base = "./games/space-adventure-one/index.html";
-			frame.src = SPACE_ADVENTURE_SERVER_WSS
-				? base + "?server=" + encodeURIComponent(SPACE_ADVENTURE_SERVER_WSS)
-				: base;
 
 			function isFs() {
 				return !!(document.fullscreenElement || document.webkitFullscreenElement);
