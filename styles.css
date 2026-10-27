@@ -949,6 +949,14 @@ body::before {
     color: var(--accent-mint);
 }
 
+.blog-body img {
+    display: block;
+    max-width: 100%;
+    height: auto;
+    margin: 1.2rem auto;
+    border-radius: 12px;
+}
+
 .blog-tags {
     display: flex;
     flex-wrap: wrap;

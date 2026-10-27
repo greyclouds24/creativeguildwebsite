@@ -27,6 +27,8 @@ Maps are mostly there for scale. They should feel like a cinematic battlefield, 
 
 Ships are bright, colorful 2D sci-fi, drawn in a higher-resolution pixel-art style from a loose top-down view. Pixel art is the default on purpose. It is a nod to the arcade games this is stealing from. Other art styles can show up later as optional downloads. Only the ships, and maybe a few map features, need to live in that pixel style.
 
+![Example image of ships over a dark planet](assets/images/blog/space-combat-arena-example.svg)
+
 The battlefield itself stays bright so the fight reads clearly. Color and glow have to share the screen with the ships and the effects, so the foreground cannot turn into visual noise.
 
 Behind that, we want a darker, more vivid backdrop: planets, stars, and other cosmic objects sitting far away, ideally in 3D. The working description is a glorious celestial battlefield you are about to die on. Impacts should land hard. Bloom, particles, shaders, and the rest of Godot’s 2D effects are there to make hits feel crisp instead of muddy.
