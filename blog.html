@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Creative Guild Games — Blog</title>
+    <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+    <header class="top-bar">
+        <div class="top-bar-inner">
+            <div class="brand">
+                <span class="brand-mark"></span>
+                <span class="brand-text">Creative Guild LLC</span>
+            </div>
+
+            <nav class="nav-items">
+                <a class="nav-item" href="index.html">Home</a>
+                <a class="nav-item" href="our-games.html">Our Games</a>
+                <a class="nav-item" href="about-us.html">About Us</a>
+                <a class="nav-item active" href="blog.html">Blog</a>
+            </nav>
+
+            <div class="nav-actions">
+                <button class="projects-btn" onclick="window.location.href='help-wanted.html'">
+                    <strong>Ongoing Projects</strong>
+                    <span>Apply to help us out!</span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <main class="container">
+        <section class="profile-section">
+            <h1 class="title-bordered">Blog</h1>
+            <p class="subtitle">Notes from the studio</p>
+        </section>
+
+        <section class="portfolio">
+            <div class="blog-tools">
+                <label class="blog-search">
+                    <span class="blog-tool-label">Search</span>
+                    <input id="blog-search" type="search" placeholder="Search posts" autocomplete="off" />
+                </label>
+                <label class="blog-sort">
+                    <span class="blog-tool-label">Date</span>
+                    <select id="blog-sort">
+                        <option value="newest">Newest</option>
+                        <option value="oldest">Oldest</option>
+                    </select>
+                </label>
+                <div class="blog-tag-filters" id="blog-tag-filters" aria-label="Filter by tag"></div>
+            </div>
+            <div class="blog-list" id="blog-list">
+                <p class="blog-status">Loading posts...</p>
+            </div>
+        </section>
+    </main>
+
+    <footer class="site-footer">
+        <span class="site-version">v2.2</span>
+    </footer>
+
+    <script>
+        function escapeHtml(value) {
+            return String(value == null ? '' : value)
+                .replace(/&/g, '&amp;')
+                .replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;')
+                .replace(/"/g, '&quot;');
+        }
+
+        function formatDate(dateString) {
+            if (!dateString) return '';
+            const parts = String(dateString).split('-');
+            if (parts.length < 3) return escapeHtml(dateString);
+            const date = new Date(Number(parts[0]), Number(parts[1]) - 1, Number(parts[2]));
+            if (Number.isNaN(date.getTime())) return escapeHtml(dateString);
+            return date.toLocaleDateString(undefined, {
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric'
+            });
+        }
+
+        let allPosts = [];
+        let activeTag = '';
+
+        function tagLabel(tag) {
+            return String(tag).replace(/-/g, ' ');
+        }
+
+        function postTags(post) {
+            return Array.isArray(post.tags) ? post.tags.filter(Boolean) : [];
+        }
+
+        function postTime(post) {
+            const time = Date.parse(post.datePublished);
+            return Number.isNaN(time) ? 0 : time;
+        }
+
+        function postSearchText(post) {
+            const content = document.createElement('div');
+            content.innerHTML = post.content || '';
+            return [
+                post.title,
+                post.excerpt,
+                post.category,
+                postTags(post).map(tagLabel).join(' '),
+                content.textContent
+            ].join(' ').toLowerCase();
+        }
+
+        function renderTagFilters() {
+            const filters = document.getElementById('blog-tag-filters');
+            const tags = [...new Set(allPosts.flatMap(postTags))].sort((a, b) =>
+                tagLabel(a).localeCompare(tagLabel(b))
+            );
+            const chips = ['', ...tags].map((tag) => {
+                const selected = tag === activeTag;
+                const label = tag ? tagLabel(tag) : 'All';
+                return `<button class="blog-tag-filter${selected ? ' active' : ''}" type="button" data-tag="${escapeHtml(tag)}" aria-pressed="${selected ? 'true' : 'false'}">${escapeHtml(label)}</button>`;
+            });
+            filters.innerHTML = chips.join('');
+            filters.querySelectorAll('.blog-tag-filter').forEach((button) => {
+                button.addEventListener('click', () => {
+                    activeTag = button.dataset.tag || '';
+                    renderBlog();
+                });
+            });
+        }
+
+        function visiblePosts() {
+            const query = document.getElementById('blog-search').value.trim().toLowerCase();
+            const sort = document.getElementById('blog-sort').value;
+            const posts = allPosts.filter((post) => {
+                const matchesTag = !activeTag || postTags(post).some((tag) => tag.toLowerCase() === activeTag.toLowerCase());
+                const matchesQuery = !query || postSearchText(post).includes(query);
+                return matchesTag && matchesQuery;
+            });
+            posts.sort((a, b) => sort === 'oldest' ? postTime(a) - postTime(b) : postTime(b) - postTime(a));
+            return posts;
+        }
+
+        function renderBlog() {
+            renderTagFilters();
+            const list = document.getElementById('blog-list');
+            const posts = visiblePosts();
+            if (!allPosts.length) {
+                list.innerHTML = '<p class="blog-status">Nothing published yet.</p>';
+                return;
+            }
+            if (!posts.length) {
+                list.innerHTML = '<p class="blog-status">No posts match that search.</p>';
+                return;
+            }
+
+            list.innerHTML = posts.map((post, index) => {
+                const tags = postTags(post);
+                const meta = [
+                    formatDate(post.datePublished),
+                    post.category,
+                    post.readTime
+                ].filter(Boolean).map(escapeHtml).join(' · ');
+
+                return `
+                    <article class="blog-card" id="post-${escapeHtml(post.id || index)}">
+                        <div class="blog-card-header">
+                            <div>
+                                <h2>${escapeHtml(post.title || 'Untitled')}</h2>
+                                <p class="blog-meta">${meta}</p>
+                            </div>
+                            <button class="blog-toggle" type="button" aria-expanded="false">Read</button>
+                        </div>
+                        ${tags.length ? `<div class="blog-tags">${tags.map((tag) => `<button class="blog-tag" type="button" data-tag="${escapeHtml(tag)}">${escapeHtml(tagLabel(tag))}</button>`).join('')}</div>` : ''}
+                        <p class="blog-excerpt">${escapeHtml(post.excerpt || '')}</p>
+                        <div class="blog-body">
+                            ${post.content || ''}
+                        </div>
+                    </article>
+                `;
+            }).join('');
+
+            list.querySelectorAll('.blog-toggle').forEach((button) => {
+                button.addEventListener('click', () => {
+                    const card = button.closest('.blog-card');
+                    const open = card.classList.toggle('expanded');
+                    button.setAttribute('aria-expanded', open ? 'true' : 'false');
+                    button.textContent = open ? 'Close' : 'Read';
+                });
+            });
+
+            list.querySelectorAll('.blog-tag').forEach((button) => {
+                button.addEventListener('click', () => {
+                    activeTag = button.dataset.tag || '';
+                    renderBlog();
+                });
+            });
+        }
+
+        async function loadPosts() {
+            const list = document.getElementById('blog-list');
+            try {
+                const indexResponse = await fetch('tpsiteitems/data/blogs/blog-index.json');
+                if (!indexResponse.ok) throw new Error('Missing blog index');
+                const files = await indexResponse.json();
+                allPosts = await Promise.all(files.map(async (filename) => {
+                    const response = await fetch(`tpsiteitems/data/blogs/${filename}`);
+                    if (!response.ok) throw new Error(filename);
+                    return response.json();
+                }));
+                renderBlog();
+            } catch (error) {
+                console.error(error);
+                list.innerHTML = '<p class="blog-status">Posts could not be loaded.</p>';
+            }
+        }
+
+        document.getElementById('blog-search').addEventListener('input', renderBlog);
+        document.getElementById('blog-sort').addEventListener('change', renderBlog);
+        loadPosts();
+    </script>
+</body>
+</html>
