@@ -1,9 +1,9 @@
 ---
-title: Space Combat Arena Overview
+title: Space Combat Arena Announcement
 datePublished: 2026-10-26
-category: Games
-tags: ["space-combat-arena", "godot", "pvp", "devlog"]
-excerpt: A first look at our fast, top-down spaceship fighter. Build. Fly. Fight. Repeat.
+category: News and Announcements
+tags: ["Space Combat Arena", "annoucement"]
+excerpt: "It's like Galaga got modernized and turned into a PVP shooter."
 readTime: 4 min read
 ---
 
