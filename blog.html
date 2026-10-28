@@ -4,7 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Creative Guild Games — Blog</title>
-    <link rel="stylesheet" href="styles.css?v=20261027o" />
+    <link rel="stylesheet" href="styles.css?v=20261027p" />
 </head>
 <body>
     <header class="top-bar">
@@ -107,8 +107,7 @@
             image: 'assets/images/manipulation_library_capsule.jpg',
             wideImage: 'assets/images/horizontal_capsule.png',
             alt: 'Manipulation',
-            label: 'play now!',
-            wideLabel: 'Play Now'
+            label: 'Out now on steam!'
         }];
         let allPosts = [];
         let activeTag = '';
@@ -149,8 +148,7 @@
         function promoMarkup(kind) {
             return BLOG_PROMOS.map((promo) => {
                 const src = kind === 'blog-ad-sliver' ? promo.wideImage : promo.image;
-                const text = kind === 'blog-ad-sliver' ? promo.wideLabel : promo.label;
-                const label = `<span class="blog-ad-label">${escapeHtml(text)}</span>`;
+                const label = `<span class="project-status-featured">${escapeHtml(promo.label)}</span>`;
                 return `
                 <a class="blog-ad ${kind}" href="${escapeHtml(promo.href)}" target="_blank" rel="noopener noreferrer">
                     <img src="${escapeHtml(src)}" alt="${escapeHtml(promo.alt)}" />
@@ -614,5 +612,6 @@
         document.getElementById('blog-rail').innerHTML = promoMarkup('blog-ad-rail');
         loadPosts();
     </script>
+    <script src="button-approach.js?v=20261027q"></script>
 </body>
 </html>
