@@ -4,7 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Creative Guild Games — Blog</title>
-    <link rel="stylesheet" href="styles.css?v=20261027b" />
+    <link rel="stylesheet" href="styles.css?v=20261027c" />
 </head>
 <body>
     <header class="top-bar">
@@ -37,24 +37,38 @@
         </section>
 
         <section class="portfolio" id="blog-panel">
-            <div class="blog-tools">
-                <label class="blog-search">
-                    <span class="blog-tool-label">Search</span>
-                    <input id="blog-search" type="search" placeholder="Search posts" autocomplete="off" />
-                </label>
-                <label class="blog-sort">
-                    <span class="blog-tool-label">Date</span>
-                    <select id="blog-sort">
-                        <option value="newest">Newest</option>
-                        <option value="oldest">Oldest</option>
-                    </select>
-                </label>
-                <div class="blog-tag-filters" id="blog-tag-filters" aria-label="Filter by tag"></div>
+            <div class="blog-layout">
+                <div class="blog-column">
+                    <div class="blog-tools">
+                        <label class="blog-search">
+                            <span class="blog-tool-label">Search</span>
+                            <input id="blog-search" type="search" placeholder="Search posts" autocomplete="off" />
+                        </label>
+                        <label class="blog-sort">
+                            <span class="blog-tool-label">Date</span>
+                            <select id="blog-sort">
+                                <option value="newest">Newest</option>
+                                <option value="oldest">Oldest</option>
+                            </select>
+                        </label>
+                        <button class="blog-asset-toggle" id="blog-asset-toggle" type="button" aria-pressed="false">Asset search</button>
+                        <div class="blog-tag-filters" id="blog-tag-filters" aria-label="Filter by tag"></div>
+                    </div>
+                    <div class="asset-panel" id="asset-panel" hidden>
+                        <label class="blog-search">
+                            <span class="blog-tool-label">Asset tags</span>
+                            <input id="asset-search" type="search" placeholder="Search asset tags" autocomplete="off" />
+                        </label>
+                        <div class="blog-tag-filters" id="asset-tag-filters" aria-label="Filter assets by tag"></div>
+                        <div class="asset-results" id="asset-results"></div>
+                    </div>
+                    <div class="blog-list" id="blog-list">
+                        <p class="blog-status">Loading posts...</p>
+                    </div>
+                    <nav class="blog-pager" id="blog-pager" aria-label="Blog pages" hidden></nav>
+                </div>
+                <aside class="blog-rail" id="blog-rail" aria-label="Studio promotions"></aside>
             </div>
-            <div class="blog-list" id="blog-list">
-                <p class="blog-status">Loading posts...</p>
-            </div>
-            <nav class="blog-pager" id="blog-pager" aria-label="Blog pages" hidden></nav>
         </section>
     </main>
 
@@ -86,9 +100,56 @@
         }
 
         const PAGE_SIZE = 10;
+        const BLOG_PROMOS = [{
+            href: 'https://store.steampowered.com/app/3937580/Manipulation/',
+            image: 'assets/images/featured_manipulation.png',
+            alt: 'Manipulation',
+            label: 'Get now on Steam'
+        }];
         let allPosts = [];
         let activeTag = '';
+        let activeAssetTag = '';
+        let assetMode = false;
         let currentPage = 1;
+
+        function picturePattern() {
+            return /!pic\{"([^"]+)"\}(?:\["([^"]*)"\])?((?:#[A-Za-z0-9][A-Za-z0-9-]*)*)/g;
+        }
+
+        function pictureTags(raw) {
+            const found = String(raw || '').split('#').map((tag) => tag.trim()).filter(Boolean);
+            const tags = [];
+            const seen = new Set();
+            found.concat('asset').forEach((tag) => {
+                const key = tag.toLowerCase();
+                if (seen.has(key)) return;
+                seen.add(key);
+                tags.push(tag);
+            });
+            return tags;
+        }
+
+        function collectPictures(markdown, postId) {
+            const assets = [];
+            for (const match of String(markdown || '').matchAll(picturePattern())) {
+                assets.push({
+                    id: `${postId}-${assets.length}`,
+                    src: String(match[1]).trim(),
+                    caption: match[2] ? String(match[2]).trim() : '',
+                    tags: pictureTags(match[3])
+                });
+            }
+            return assets;
+        }
+
+        function promoMarkup(kind) {
+            return BLOG_PROMOS.map((promo) => `
+                <a class="blog-ad ${kind}" href="${escapeHtml(promo.href)}" target="_blank" rel="noopener noreferrer">
+                    <img src="${escapeHtml(promo.image)}" alt="${escapeHtml(promo.alt)}" />
+                    <span class="blog-ad-label">${escapeHtml(promo.label)}</span>
+                </a>
+            `).join('');
+        }
 
         function tagLabel(tag) {
             return String(tag).replace(/-/g, ' ');
@@ -192,16 +253,18 @@
             if (!allPosts.length) {
                 list.innerHTML = '<p class="blog-status">Nothing published yet.</p>';
                 renderPager(0);
+                applyAssetVisibility();
                 return;
             }
             if (!posts.length) {
                 list.innerHTML = '<p class="blog-status">No posts match that search.</p>';
                 renderPager(0);
+                applyAssetVisibility();
                 return;
             }
 
             const pagePosts = posts.slice((currentPage - 1) * PAGE_SIZE, currentPage * PAGE_SIZE);
-            list.innerHTML = pagePosts.map((post, index) => {
+            const cards = pagePosts.map((post, index) => {
                 const tags = postTags(post);
                 const meta = [
                     formatDate(post.datePublished),
@@ -226,7 +289,13 @@
                         </div>
                     </article>
                 `;
-            }).join('');
+            });
+            const sliver = promoMarkup('blog-ad-sliver');
+            if (cards.length === 1) {
+                list.innerHTML = cards[0] + sliver;
+            } else {
+                list.innerHTML = cards[0] + sliver + cards.slice(1, -1).join('') + cards[cards.length - 1] + sliver;
+            }
             renderPager(posts.length);
 
             function setPostOpen(card, open) {
@@ -266,6 +335,7 @@
                     renderBlog();
                 });
             });
+            applyAssetVisibility();
         }
 
         function wordCount(text) {
@@ -290,18 +360,22 @@
             return (lastSpace > 0 ? cut.slice(0, lastSpace) : cut) + '...';
         }
 
-        function blogPictures(markdown) {
-            return String(markdown || '').replace(/!pic\{"([^"]+)"\}(?:\["([^"]*)"\])?/g, (_, file, caption) => {
+        function blogPictures(markdown, assets) {
+            const pictures = assets || [];
+            let index = 0;
+            return String(markdown || '').replace(picturePattern(), (_, file, caption) => {
+                const asset = pictures[index++] || {};
                 const src = escapeHtml(String(file).trim());
                 const text = caption ? String(caption).trim() : '';
                 const alt = escapeHtml(text || 'Blog image');
                 const figcaption = text ? `<figcaption>${escapeHtml(text)}</figcaption>` : '';
-                return `<figure class="blog-figure"><img src="${src}" alt="${alt}">${figcaption}</figure>`;
+                const assetId = escapeHtml(asset.id || '');
+                return `<figure class="blog-figure" id="asset-${assetId}" data-asset-id="${assetId}"><img src="${src}" alt="${alt}">${figcaption}</figure>`;
             });
         }
 
-        function markdownToHtml(markdown) {
-            const html = marked.parse(blogPictures(markdown), { gfm: true, breaks: false });
+        function markdownToHtml(markdown, assets) {
+            const html = marked.parse(blogPictures(markdown, assets), { gfm: true, breaks: false });
             return html
                 .replace(/<table>/g, '<table class="blog-table">')
                 .replace(/<blockquote>/g, '<blockquote class="blog-quote">')
@@ -345,9 +419,10 @@
             const body = lines.slice(bodyStart).join('\n').trim();
             if (!wordCount(body)) return null;
 
-            const content = markdownToHtml(body);
-            const words = wordCount(content);
             const id = filename.replace(/\.md$/i, '').toLowerCase().replace(/[^a-z0-9]/g, '-');
+            const assets = collectPictures(body, id);
+            const content = markdownToHtml(body, assets);
+            const words = wordCount(content);
             return {
                 id,
                 title: id,
@@ -358,8 +433,111 @@
                 wordCount: words,
                 readTime: readingTime(words),
                 excerpt: frontmatter.excerpt || excerptFrom(content),
+                assets,
                 content
             };
+        }
+
+        function allAssets() {
+            return allPosts.flatMap((post) => (post.assets || []).map((asset) => ({
+                ...asset,
+                postId: post.id,
+                postTitle: post.title || 'Untitled'
+            })));
+        }
+
+        function visibleAssets() {
+            const query = document.getElementById('asset-search').value.trim().toLowerCase();
+            return allAssets().filter((asset) => {
+                const tags = asset.tags.map((tag) => tag.toLowerCase());
+                const labels = asset.tags.map((tag) => tagLabel(tag).toLowerCase());
+                const matchesChip = !activeAssetTag || tags.includes(activeAssetTag.toLowerCase());
+                const matchesQuery = !query || tags.some((tag) => tag.includes(query)) || labels.some((label) => label.includes(query));
+                return matchesChip && matchesQuery;
+            });
+        }
+
+        function renderAssetFilters() {
+            const filters = document.getElementById('asset-tag-filters');
+            const tags = [...new Set(allAssets().flatMap((asset) => asset.tags))].sort((a, b) =>
+                tagLabel(a).localeCompare(tagLabel(b))
+            );
+            filters.innerHTML = ['', ...tags].map((tag) => {
+                const selected = tag.toLowerCase() === activeAssetTag.toLowerCase();
+                const label = tag ? tagLabel(tag) : 'All';
+                return `<button class="blog-tag-filter${selected ? ' active' : ''}" type="button" data-asset-tag="${escapeHtml(tag)}" aria-pressed="${selected ? 'true' : 'false'}">${escapeHtml(label)}</button>`;
+            }).join('');
+            filters.querySelectorAll('.blog-tag-filter').forEach((button) => {
+                button.addEventListener('click', () => {
+                    activeAssetTag = button.dataset.assetTag || '';
+                    renderAssets();
+                });
+            });
+        }
+
+        function renderAssets() {
+            renderAssetFilters();
+            const results = document.getElementById('asset-results');
+            const assets = visibleAssets();
+            if (!assets.length) {
+                results.innerHTML = '<p class="blog-status">No images match that search.</p>';
+                return;
+            }
+            results.innerHTML = assets.map((asset) => `
+                <button class="asset-card" type="button" data-asset-id="${escapeHtml(asset.id)}">
+                    <img src="${escapeHtml(asset.src)}" alt="${escapeHtml(asset.caption || asset.postTitle)}" />
+                    <span class="asset-card-text">
+                        ${asset.caption ? `<span class="asset-card-caption">${escapeHtml(asset.caption)}</span>` : ''}
+                        <span class="asset-card-post">${escapeHtml(asset.postTitle)}</span>
+                    </span>
+                </button>
+            `).join('');
+            results.querySelectorAll('.asset-card').forEach((button) => {
+                button.addEventListener('click', () => openAsset(button.dataset.assetId));
+            });
+        }
+
+        function applyAssetVisibility() {
+            const panel = document.getElementById('asset-panel');
+            const list = document.getElementById('blog-list');
+            const pager = document.getElementById('blog-pager');
+            const button = document.getElementById('blog-asset-toggle');
+            panel.hidden = !assetMode;
+            list.hidden = assetMode;
+            if (assetMode) pager.hidden = true;
+            button.textContent = assetMode ? 'Back to posts' : 'Asset search';
+            button.classList.toggle('active', assetMode);
+            button.setAttribute('aria-pressed', assetMode ? 'true' : 'false');
+        }
+
+        function revealAsset(asset) {
+            const figure = document.getElementById('asset-' + asset.id);
+            const card = figure && figure.closest('.blog-card');
+            if (!card) return;
+            card.classList.add('expanded');
+            const toggle = card.querySelector('.blog-card-header .blog-toggle');
+            if (toggle) {
+                toggle.setAttribute('aria-expanded', 'true');
+                toggle.textContent = 'Close';
+            }
+            requestAnimationFrame(() => {
+                figure.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            });
+        }
+
+        function openAsset(assetId) {
+            const asset = allAssets().find((item) => item.id === assetId);
+            if (!asset) return;
+            assetMode = false;
+            activeTag = '';
+            activeAssetTag = '';
+            document.getElementById('blog-search').value = '';
+            document.getElementById('asset-search').value = '';
+            const posts = visiblePosts();
+            const index = posts.findIndex((post) => post.id === asset.postId);
+            currentPage = index >= 0 ? Math.floor(index / PAGE_SIZE) + 1 : 1;
+            renderBlog();
+            revealAsset(asset);
         }
 
         async function listMarkdownFiles() {
@@ -412,6 +590,16 @@
             currentPage = 1;
             renderBlog();
         });
+        document.getElementById('blog-asset-toggle').addEventListener('click', () => {
+            assetMode = !assetMode;
+            if (assetMode) renderAssets();
+            applyAssetVisibility();
+            if (!assetMode) renderBlog();
+        });
+        document.getElementById('asset-search').addEventListener('input', () => {
+            renderAssets();
+        });
+        document.getElementById('blog-rail').innerHTML = promoMarkup('blog-ad-rail');
         loadPosts();
     </script>
 </body>

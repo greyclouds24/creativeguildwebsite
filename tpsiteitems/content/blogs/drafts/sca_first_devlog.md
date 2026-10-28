@@ -7,7 +7,7 @@ excerpt: ""
 readTime: 4 min read
 ---
 
-!pic{"assets/images/blog/SCA - fullscreen title menu.png"}
+!pic{"assets/images/blog/SCA - fullscreen title menu.png"}#space-combat-arena#title
 
 # Build. Fly. Fight. Repeat.
 
