@@ -4,7 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Creative Guild Games — Blog</title>
-    <link rel="stylesheet" href="styles.css?v=20261027c" />
+    <link rel="stylesheet" href="styles.css?v=20261027e" />
 </head>
 <body>
     <header class="top-bar">
@@ -102,9 +102,10 @@
         const PAGE_SIZE = 10;
         const BLOG_PROMOS = [{
             href: 'https://store.steampowered.com/app/3937580/Manipulation/',
-            image: 'assets/images/featured_manipulation.png',
+            image: 'assets/images/manipulation_library_capsule.jpg',
+            wideImage: 'assets/images/horizontal_capsule.png',
             alt: 'Manipulation',
-            label: 'Get now on Steam'
+            label: 'play now!'
         }];
         let allPosts = [];
         let activeTag = '';
@@ -143,12 +144,16 @@
         }
 
         function promoMarkup(kind) {
-            return BLOG_PROMOS.map((promo) => `
+            return BLOG_PROMOS.map((promo) => {
+                const src = kind === 'blog-ad-sliver' ? promo.wideImage : promo.image;
+                const label = kind === 'blog-ad-sliver' ? '' : `<span class="blog-ad-label">${escapeHtml(promo.label)}</span>`;
+                return `
                 <a class="blog-ad ${kind}" href="${escapeHtml(promo.href)}" target="_blank" rel="noopener noreferrer">
-                    <img src="${escapeHtml(promo.image)}" alt="${escapeHtml(promo.alt)}" />
-                    <span class="blog-ad-label">${escapeHtml(promo.label)}</span>
+                    <img src="${escapeHtml(src)}" alt="${escapeHtml(promo.alt)}" />
+                    ${label}
                 </a>
-            `).join('');
+            `;
+            }).join('');
         }
 
         function tagLabel(tag) {
@@ -464,7 +469,7 @@
             );
             filters.innerHTML = ['', ...tags].map((tag) => {
                 const selected = tag.toLowerCase() === activeAssetTag.toLowerCase();
-                const label = tag ? tagLabel(tag) : 'All';
+                const label = tag || 'All';
                 return `<button class="blog-tag-filter${selected ? ' active' : ''}" type="button" data-asset-tag="${escapeHtml(tag)}" aria-pressed="${selected ? 'true' : 'false'}">${escapeHtml(label)}</button>`;
             }).join('');
             filters.querySelectorAll('.blog-tag-filter').forEach((button) => {
@@ -489,6 +494,7 @@
                     <span class="asset-card-text">
                         ${asset.caption ? `<span class="asset-card-caption">${escapeHtml(asset.caption)}</span>` : ''}
                         <span class="asset-card-post">${escapeHtml(asset.postTitle)}</span>
+                        <span class="asset-card-tags">${asset.tags.map((tag) => `<span class="asset-card-tag">${escapeHtml(tag)}</span>`).join('')}</span>
                     </span>
                 </button>
             `).join('');
@@ -504,6 +510,9 @@
             const button = document.getElementById('blog-asset-toggle');
             panel.hidden = !assetMode;
             list.hidden = assetMode;
+            document.querySelectorAll('.blog-tools .blog-search, .blog-tools .blog-sort, #blog-tag-filters').forEach((control) => {
+                control.hidden = assetMode;
+            });
             if (assetMode) pager.hidden = true;
             button.textContent = assetMode ? 'Back to posts' : 'Asset search';
             button.classList.toggle('active', assetMode);
