@@ -7,11 +7,9 @@ excerpt: A first look at our fast, top-down spaceship fighter. Build. Fly. Fight
 readTime: 4 min read
 ---
 
-# Space Combat Arena Overview
+!pic{"assets/images/blog/SCA - fullscreen title menu.png"}
 
-!pic{"assets/images/blog/SCA - fullscreen title menu.png"}["Build. Fly. Fight. Repeat."]
-
-**Build. Fly. Fight. Repeat.**
+# Build. Fly. Fight. Repeat.
 
 Space Combat Arena is a fast, top-down spaceship fighter. Classic arcade shooting meets the snap decisions of a platform fighter: tactical, bright, and built to feel good in the first ten seconds. The pitch we keep coming back to is simple. If Galaga grew up into a modern PVP game. If Super Smash Bros were a shooter, and the fighters were spaceships.
 
