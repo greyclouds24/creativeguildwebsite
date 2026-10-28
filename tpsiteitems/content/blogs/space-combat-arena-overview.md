@@ -9,6 +9,8 @@ readTime: 4 min read
 
 # Space Combat Arena Overview
 
+![](assets\images\blog\SCA - fullscreen title menu.png)
+
 **Build. Fly. Fight. Repeat.**
 
 Space Combat Arena is a fast, top-down spaceship fighter. Classic arcade shooting meets the snap decisions of a platform fighter: tactical, bright, and built to feel good in the first ten seconds. The pitch we keep coming back to is simple. If Galaga grew up into a modern PVP game. If Super Smash Bros were a shooter, and the fighters were spaceships.
@@ -26,8 +28,6 @@ Maps are mostly there for scale. They should feel like a cinematic battlefield, 
 ## Look
 
 Ships are bright, colorful 2D sci-fi, drawn in a higher-resolution pixel-art style from a loose top-down view. Pixel art is the default on purpose. It is a nod to the arcade games this is stealing from. Other art styles can show up later as optional downloads. Only the ships, and maybe a few map features, need to live in that pixel style.
-
-![Example image of ships over a dark planet](assets/images/blog/space-combat-arena-example.svg)
 
 The battlefield itself stays bright so the fight reads clearly. Color and glow have to share the screen with the ships and the effects, so the foreground cannot turn into visual noise.
 
