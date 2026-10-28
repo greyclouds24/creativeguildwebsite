@@ -4,7 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Creative Guild Games — Blog</title>
-    <link rel="stylesheet" href="styles.css?v=20261027e" />
+    <link rel="stylesheet" href="styles.css?v=20261027l" />
 </head>
 <body>
     <header class="top-bar">
@@ -40,10 +40,13 @@
             <div class="blog-layout">
                 <div class="blog-column">
                     <div class="blog-tools">
-                        <label class="blog-search">
-                            <span class="blog-tool-label">Search</span>
-                            <input id="blog-search" type="search" placeholder="Search posts" autocomplete="off" />
-                        </label>
+                        <div class="blog-search-stack">
+                            <button class="blog-asset-toggle" id="blog-asset-toggle" type="button" aria-pressed="false">Asset Search</button>
+                            <label class="blog-search">
+                                <span class="blog-tool-label">Search</span>
+                                <input id="blog-search" type="search" placeholder="Search posts" autocomplete="off" />
+                            </label>
+                        </div>
                         <label class="blog-sort">
                             <span class="blog-tool-label">Date</span>
                             <select id="blog-sort">
@@ -51,7 +54,6 @@
                                 <option value="oldest">Oldest</option>
                             </select>
                         </label>
-                        <button class="blog-asset-toggle" id="blog-asset-toggle" type="button" aria-pressed="false">Asset search</button>
                         <div class="blog-tag-filters" id="blog-tag-filters" aria-label="Filter by tag"></div>
                     </div>
                     <div class="asset-panel" id="asset-panel" hidden>
@@ -105,7 +107,8 @@
             image: 'assets/images/manipulation_library_capsule.jpg',
             wideImage: 'assets/images/horizontal_capsule.png',
             alt: 'Manipulation',
-            label: 'play now!'
+            label: 'play now!',
+            wideLabel: 'Play Now'
         }];
         let allPosts = [];
         let activeTag = '';
@@ -136,7 +139,7 @@
                 assets.push({
                     id: `${postId}-${assets.length}`,
                     src: String(match[1]).trim(),
-                    caption: match[2] ? String(match[2]).trim() : '',
+                    description: match[2] ? String(match[2]).trim() : '',
                     tags: pictureTags(match[3])
                 });
             }
@@ -146,7 +149,8 @@
         function promoMarkup(kind) {
             return BLOG_PROMOS.map((promo) => {
                 const src = kind === 'blog-ad-sliver' ? promo.wideImage : promo.image;
-                const label = kind === 'blog-ad-sliver' ? '' : `<span class="blog-ad-label">${escapeHtml(promo.label)}</span>`;
+                const text = kind === 'blog-ad-sliver' ? promo.wideLabel : promo.label;
+                const label = `<span class="blog-ad-label">${escapeHtml(text)}</span>`;
                 return `
                 <a class="blog-ad ${kind}" href="${escapeHtml(promo.href)}" target="_blank" rel="noopener noreferrer">
                     <img src="${escapeHtml(src)}" alt="${escapeHtml(promo.alt)}" />
@@ -296,10 +300,11 @@
                 `;
             });
             const sliver = promoMarkup('blog-ad-sliver');
+            const bottomSliver = cards.length >= 4 ? sliver : '';
             if (cards.length === 1) {
                 list.innerHTML = cards[0] + sliver;
             } else {
-                list.innerHTML = cards[0] + sliver + cards.slice(1, -1).join('') + cards[cards.length - 1] + sliver;
+                list.innerHTML = cards[0] + sliver + cards.slice(1, -1).join('') + cards[cards.length - 1] + bottomSliver;
             }
             renderPager(posts.length);
 
@@ -368,14 +373,12 @@
         function blogPictures(markdown, assets) {
             const pictures = assets || [];
             let index = 0;
-            return String(markdown || '').replace(picturePattern(), (_, file, caption) => {
+            return String(markdown || '').replace(picturePattern(), (_, file, description) => {
                 const asset = pictures[index++] || {};
                 const src = escapeHtml(String(file).trim());
-                const text = caption ? String(caption).trim() : '';
-                const alt = escapeHtml(text || 'Blog image');
-                const figcaption = text ? `<figcaption>${escapeHtml(text)}</figcaption>` : '';
+                const alt = escapeHtml(description ? String(description).trim() : 'Blog image');
                 const assetId = escapeHtml(asset.id || '');
-                return `<figure class="blog-figure" id="asset-${assetId}" data-asset-id="${assetId}"><img src="${src}" alt="${alt}">${figcaption}</figure>`;
+                return `<figure class="blog-figure" id="asset-${assetId}" data-asset-id="${assetId}"><img src="${src}" alt="${alt}"></figure>`;
             });
         }
 
@@ -490,10 +493,10 @@
             }
             results.innerHTML = assets.map((asset) => `
                 <button class="asset-card" type="button" data-asset-id="${escapeHtml(asset.id)}">
-                    <img src="${escapeHtml(asset.src)}" alt="${escapeHtml(asset.caption || asset.postTitle)}" />
+                    <img src="${escapeHtml(asset.src)}" alt="${escapeHtml(asset.description || asset.postTitle)}" />
                     <span class="asset-card-text">
-                        ${asset.caption ? `<span class="asset-card-caption">${escapeHtml(asset.caption)}</span>` : ''}
                         <span class="asset-card-post">${escapeHtml(asset.postTitle)}</span>
+                        ${asset.description ? `<span class="asset-card-description">${escapeHtml(asset.description)}</span>` : ''}
                         <span class="asset-card-tags">${asset.tags.map((tag) => `<span class="asset-card-tag">${escapeHtml(tag)}</span>`).join('')}</span>
                     </span>
                 </button>
@@ -514,7 +517,7 @@
                 control.hidden = assetMode;
             });
             if (assetMode) pager.hidden = true;
-            button.textContent = assetMode ? 'Back to posts' : 'Asset search';
+            button.textContent = assetMode ? 'Back to posts' : 'Asset Search';
             button.classList.toggle('active', assetMode);
             button.setAttribute('aria-pressed', assetMode ? 'true' : 'false');
         }

@@ -27,12 +27,9 @@ class LorenzAttractor {
         
         // Website color scheme (mint, gold, and variations)
         this.colors = [
-            '#53937E', // accent-mint
-            '#DEB866', // accent-gold
-            '#7AB8A0', // lighter mint
-            '#F5D08A', // lighter gold
-            '#5DAE8B', // medium mint
-            '#E8C97A'  // medium gold
+            '#F08BB8', // pink
+            '#3DCFC8', // teal
+            '#6AA6FF'  // blue
         ];
         
         // Multiple particles for better visualization

@@ -7,7 +7,7 @@ excerpt: "It's like Galaga got modernized and turned into a PVP shooter."
 readTime: 4 min read
 ---
 
-!pic{"assets/images/blog/SCA - fullscreen title menu.png"}#sca-menu-title-screen
+!pic{"assets/images/blog/SCA - fullscreen title menu.png"}["Space Combat Arena Introduction"]#sca-menu-title-screen
 
 # Build. Fly. Fight. Repeat.
 
