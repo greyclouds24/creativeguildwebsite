@@ -9,7 +9,7 @@ readTime: 4 min read
 
 # Space Combat Arena Overview
 
-![](assets\images\blog\SCA - fullscreen title menu.png)
+![Build. Fly. Fight. Repeat.](assets\images\blog\SCA - fullscreen title menu.png)
 
 **Build. Fly. Fight. Repeat.**
 
