@@ -4,7 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Creative Guild Games — Blog</title>
-    <link rel="stylesheet" href="styles.css?v=20261027" />
+    <link rel="stylesheet" href="styles.css?v=20261027b" />
 </head>
 <body>
     <header class="top-bar">
@@ -290,8 +290,18 @@
             return (lastSpace > 0 ? cut.slice(0, lastSpace) : cut) + '...';
         }
 
+        function blogPictures(markdown) {
+            return String(markdown || '').replace(/!pic\{"([^"]+)"\}(?:\["([^"]*)"\])?/g, (_, file, caption) => {
+                const src = escapeHtml(String(file).trim());
+                const text = caption ? String(caption).trim() : '';
+                const alt = escapeHtml(text || 'Blog image');
+                const figcaption = text ? `<figcaption>${escapeHtml(text)}</figcaption>` : '';
+                return `<figure class="blog-figure"><img src="${src}" alt="${alt}">${figcaption}</figure>`;
+            });
+        }
+
         function markdownToHtml(markdown) {
-            const html = marked.parse(markdown, { gfm: true, breaks: false });
+            const html = marked.parse(blogPictures(markdown), { gfm: true, breaks: false });
             return html
                 .replace(/<table>/g, '<table class="blog-table">')
                 .replace(/<blockquote>/g, '<blockquote class="blog-quote">')
