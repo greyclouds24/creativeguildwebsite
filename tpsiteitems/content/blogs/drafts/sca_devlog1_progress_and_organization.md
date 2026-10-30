@@ -1,9 +1,9 @@
 ---
-title: SCA Devlog 1 - What's done and what's not.
+title: SCA Devlog 1 - Current State and Project Organization.
 datePublished: 2026-10-27
 category: Devlog
-tags: ["Space Combat Arena", "devlog", "godot", "plugins"]
-excerpt: ""
+tags: ["Space Combat Arena", "devlog", "Godot", "plugins", "workflow organization"]
+excerpt: "The game is firmly in the prototype state and I want to move it into demo state quickly."
 readTime: 4 min read
 ---
 
@@ -23,17 +23,11 @@ Players progress weapons and items, then save several ship builds the way a shoo
 
 Maps are mostly there for scale. They should feel like a cinematic battlefield, not a maze. We are still deciding how much the environment pushes back: occasional destructible pieces, physics obstacles, and hazards that range from annoying to actually dangerous.
 
-## What's Next
+## Getting it Demo Ready
 
-Ships are bright, colorful 2D sci-fi, drawn in a higher-resolution pixel-art style from a loose top-down view. Pixel art is the default on purpose. It is a nod to the arcade games this is stealing from. Other art styles can show up later as optional downloads. Only the ships, and maybe a few map features, need to live in that pixel style.
+A lot is there. But it's rough proof of concept versions of everything. Something an engineer made not an artist. It requires polish on everything.
 
-The battlefield itself stays bright so the fight reads clearly. Color and glow have to share the screen with the ships and the effects, so the foreground cannot turn into visual noise.
-
-Behind that, we want a darker, more vivid backdrop: planets, stars, and other cosmic objects sitting far away, ideally in 3D. The working description is a glorious celestial battlefield you are about to die on. Impacts should land hard. Bloom, particles, shaders, and the rest of Godot’s 2D effects are there to make hits feel crisp instead of muddy.
-
-The title screen idea is the name collapsing into a pulsar, and that pulsar becoming the backdrop of the main menu and lobby.
-
-## How We're Tracking Progress
+## Getting Organized as a Solo-Dev
 
 This is an early design note, not a release announcement. The public playtest is offline while we keep building.
 
