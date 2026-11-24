@@ -842,7 +842,7 @@ body::before {
 }
 
 .blog-sort select {
-    min-width: 140px;
+    min-width: 190px;
 }
 
 .blog-search input:focus,
@@ -856,8 +856,27 @@ body::before {
 .blog-tag-filters {
     display: flex;
     flex-wrap: wrap;
+    align-content: flex-start;
     gap: 8px;
     flex: 1;
+    min-width: 0;
+    /* Two chip rows, then the rest scrolls inside the box */
+    max-height: calc(2 * (1.2 * 0.85rem + 16px) + 8px);
+    overflow-y: auto;
+    overscroll-behavior: contain;
+}
+
+.blog-tag-filters::-webkit-scrollbar {
+    width: 4px;
+}
+
+.blog-tag-filters::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.blog-tag-filters::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.55);
+    border-radius: 999px;
 }
 
 .blog-tag-filter {
@@ -869,6 +888,7 @@ body::before {
     cursor: pointer;
     font: inherit;
     font-size: 0.85rem;
+    line-height: 1.2;
 }
 
 .blog-tag-filter.active,
@@ -885,18 +905,77 @@ body::before {
 }
 
 .blog-card {
+    --blog-gutter: 28px;
     background: var(--accent-green);
     border: 1px solid rgba(255,255,255,0.12);
     border-radius: 16px;
-    padding: 24px 28px;
     text-align: left;
+    scroll-margin-top: 20px;
+    /* Offset exceeds half the blur, so nothing shows on the top or right */
+    box-shadow: -12px 12px 18px rgba(0, 0, 0, 0.85);
+}
+
+.blog-card-media {
+    position: relative;
+    padding: 24px var(--blog-gutter) 0;
+}
+
+.blog-card-summary {
+    padding: 0 var(--blog-gutter) 24px;
+}
+
+.blog-card.expanded .blog-card-summary {
+    padding-bottom: 18px;
+}
+
+.blog-card-cover {
+    display: none;
 }
 
 .blog-card-header {
+    position: relative;
     display: flex;
     justify-content: space-between;
     gap: 16px;
     align-items: flex-start;
+}
+
+/* Collapsed preview: cover image behind the header, summary below */
+.blog-card.has-cover:not(.expanded) .blog-card-media {
+    min-height: 156px;
+    padding-bottom: 24px;
+    overflow: hidden;
+    border-radius: 15px 15px 0 0;
+    background: #000;
+}
+
+/* Scaled to the card's width at its own aspect ratio, centered vertically.
+   min-height only kicks in when that leaves the image shorter than the header. */
+.blog-card.has-cover:not(.expanded) .blog-card-cover {
+    display: block;
+    position: absolute;
+    top: 50%;
+    left: 0;
+    width: 100%;
+    height: auto;
+    min-height: 100%;
+    object-fit: cover;
+    transform: translateY(-50%);
+}
+
+.blog-card.has-cover:not(.expanded) .blog-card-header h2 {
+    text-shadow:
+        -2px -2px 0 #000, 0 -2px 0 #000, 2px -2px 0 #000,
+        -2px 0 0 #000, 2px 0 0 #000,
+        -2px 2px 0 #000, 0 2px 0 #000, 2px 2px 0 #000,
+        -1px -2px 0 #000, 1px -2px 0 #000, -2px -1px 0 #000, 2px -1px 0 #000,
+        -2px 1px 0 #000, 2px 1px 0 #000, -1px 2px 0 #000, 1px 2px 0 #000;
+}
+
+.blog-card.has-cover:not(.expanded) .blog-card-header .blog-toggle {
+    background: rgba(0, 0, 0, 0.7);
+    border-color: rgba(255,255,255,0.6);
+    box-shadow: 0 0 0 1px #000;
 }
 
 .blog-card h2 {
@@ -905,6 +984,7 @@ body::before {
 }
 
 .blog-meta {
+    margin-top: 16px;
     font-size: 0.85rem;
     opacity: 0.75;
 }
@@ -942,8 +1022,8 @@ body::before {
 
 .blog-body {
     display: none;
-    margin-top: 18px;
-    padding-top: 18px;
+    margin: 0 var(--blog-gutter);
+    padding: 18px 0 24px;
     border-top: 1px solid rgba(255,255,255,0.12);
     line-height: 1.65;
 }
@@ -1010,20 +1090,54 @@ body::before {
     opacity: 0.8;
 }
 
+.blog-body .blog-smallpic-row {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: var(--blog-gutter, 28px);
+    margin: 1.2rem 0;
+}
+
+.blog-body .blog-smallpic-row .blog-smallpic {
+    flex: 0 0 calc((100% - (2 * var(--blog-gutter, 28px))) / 3);
+    width: calc((100% - (2 * var(--blog-gutter, 28px))) / 3);
+    max-width: calc((100% - (2 * var(--blog-gutter, 28px))) / 3);
+    margin: 0;
+    aspect-ratio: 16 / 9;
+    overflow: hidden;
+    position: relative;
+    border-radius: 12px;
+}
+
+.blog-body .blog-smallpic-row .blog-smallpic img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    max-width: none;
+    margin: 0;
+    object-fit: cover;
+    object-position: center;
+    border-radius: 0;
+}
+
 .blog-tags {
     display: flex;
     flex-wrap: wrap;
     gap: 8px;
-    margin-top: 16px;
+    margin-top: 8px;
 }
 
 .blog-tag {
+    appearance: none;
     font: inherit;
     font-size: 0.75rem;
     padding: 4px 10px;
     border-radius: 999px;
     border: 0;
-    background: rgba(222, 184, 102, 0.18);
+    outline: 1pt solid #DEB866;
+    outline-offset: 0;
+    background-color: rgba(0, 0, 0, 0.5);
     color: var(--accent-gold);
     cursor: pointer;
 }
@@ -1067,7 +1181,7 @@ body::before {
 .blog-page {
     background: transparent;
     color: white;
-    border: 1px solid rgba(255,255,255,0.3);
+    border: 1px solid var(--accent-mint);
     border-radius: 999px;
     padding: 7px 12px;
     cursor: pointer;
@@ -1078,7 +1192,7 @@ body::before {
 .blog-page.active,
 .blog-page:hover:not(:disabled) {
     background: var(--accent-gold);
-    border-color: var(--accent-gold);
+    border-color: var(--accent-mint);
     color: var(--accent-green);
 }
 
@@ -1196,6 +1310,77 @@ body::before {
     display: flex;
     flex-direction: column;
     gap: 16px;
+}
+
+.blog-latest {
+    margin-top: 8px;
+    padding: 16px;
+    background: var(--accent-green);
+    border: 1px solid rgba(255,255,255,0.12);
+    border-radius: 16px;
+    text-align: left;
+}
+
+.blog-latest[hidden] {
+    display: none;
+}
+
+.blog-latest-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 6px;
+}
+
+.blog-latest-header h2 {
+    font-size: 1.1rem;
+}
+
+.blog-latest-list {
+    list-style: none;
+}
+
+.blog-latest-list li + li {
+    border-top: 1px solid rgba(255,255,255,0.12);
+}
+
+.blog-latest-item {
+    display: block;
+    width: 100%;
+    padding: 10px 0;
+    background: transparent;
+    border: 0;
+    color: white;
+    font: inherit;
+    font-size: 0.85rem;
+    line-height: 1.4;
+    text-align: left;
+    cursor: pointer;
+}
+
+.blog-latest-item:hover .blog-latest-title {
+    color: var(--accent-gold);
+}
+
+.blog-latest-item:focus-visible {
+    outline: 2px solid var(--accent-gold);
+    outline-offset: 2px;
+}
+
+.blog-latest-title,
+.blog-latest-age {
+    display: block;
+}
+
+.blog-latest-category {
+    color: var(--accent-gold);
+}
+
+.blog-latest-age {
+    margin-top: 2px;
+    font-size: 0.75rem;
+    opacity: 0.7;
 }
 
 .blog-ad {

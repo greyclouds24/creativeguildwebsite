@@ -4,7 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Creative Guild Games — Blog</title>
-    <link rel="stylesheet" href="styles.css?v=20261027r" />
+    <link rel="stylesheet" href="styles.css?v=20261116h" />
 </head>
 <body>
     <header class="top-bar">
@@ -48,10 +48,13 @@
                             </label>
                         </div>
                         <label class="blog-sort">
-                            <span class="blog-tool-label">Date</span>
+                            <span class="blog-tool-label">Filter</span>
                             <select id="blog-sort">
-                                <option value="newest">Newest</option>
-                                <option value="oldest">Oldest</option>
+                                <option value="newest">Date newest</option>
+                                <option value="oldest">Date oldest</option>
+                                <option value="devlog">Devlog only</option>
+                                <option value="announcement">Announcement only</option>
+                                <option value="inside-look">Inside look only</option>
                             </select>
                         </label>
                         <div class="blog-tag-filters" id="blog-tag-filters" aria-label="Filter by tag"></div>
@@ -67,9 +70,11 @@
                     <div class="blog-list" id="blog-list">
                         <p class="blog-status">Loading posts...</p>
                     </div>
-                    <nav class="blog-pager" id="blog-pager" aria-label="Blog pages" hidden></nav>
+                    <nav class="blog-pager" aria-label="Blog pages" hidden></nav>
                 </div>
-                <aside class="blog-rail" id="blog-rail" aria-label="Studio promotions"></aside>
+                <aside class="blog-rail" id="blog-rail" aria-label="Studio promotions and latest posts">
+                    <section class="blog-latest" id="blog-latest" aria-label="Latest posts" hidden></section>
+                </aside>
             </div>
         </section>
     </main>
@@ -88,12 +93,17 @@
                 .replace(/"/g, '&quot;');
         }
 
+        function parseDate(dateString) {
+            const parts = String(dateString || '').split('-');
+            if (parts.length < 3) return null;
+            const date = new Date(Number(parts[0]), Number(parts[1]) - 1, Number(parts[2]));
+            return Number.isNaN(date.getTime()) ? null : date;
+        }
+
         function formatDate(dateString) {
             if (!dateString) return '';
-            const parts = String(dateString).split('-');
-            if (parts.length < 3) return escapeHtml(dateString);
-            const date = new Date(Number(parts[0]), Number(parts[1]) - 1, Number(parts[2]));
-            if (Number.isNaN(date.getTime())) return escapeHtml(dateString);
+            const date = parseDate(dateString);
+            if (!date) return escapeHtml(dateString);
             return date.toLocaleDateString(undefined, {
                 year: 'numeric',
                 month: 'long',
@@ -101,7 +111,30 @@
             });
         }
 
-        const PAGE_SIZE = 10;
+        function timeAgo(dateString) {
+            const posted = parseDate(dateString);
+            if (!posted) return '';
+            const now = new Date();
+            const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+            const days = Math.round((posted - today) / 86400000);
+            const span = Math.abs(days);
+            const relative = new Intl.RelativeTimeFormat(undefined, { numeric: 'auto' });
+            if (span < 7) return relative.format(days, 'day');
+            if (span < 30) return relative.format(Math.round(days / 7), 'week');
+            if (span < 365) return relative.format(Math.round(days / 30), 'month');
+            return relative.format(Math.round(days / 365), 'year');
+        }
+
+        const PAGE_SIZE = 5;
+        const LATEST_COUNT = 5;
+        const DEFAULT_COVERS = [
+            'Screenshot 2026-11-07 173823.png',
+            'Screenshot 2026-11-07 174006.png',
+            'Screenshot 2026-11-07 174313.png',
+            'Screenshot 2026-11-07 174527.png',
+            'Screenshot 2026-11-07 174655.png',
+            'Screenshot 2026-11-07 175058.png'
+        ].map((name) => 'assets/images/blog/default_backgrounds/' + name);
         const BLOG_PROMOS = [{
             href: 'https://store.steampowered.com/app/3937580/Manipulation/',
             image: 'assets/images/manipulation_library_capsule.jpg',
@@ -116,7 +149,18 @@
         let currentPage = 1;
 
         function picturePattern() {
-            return /!pic\{"([^"]+)"\}(?:\["([^"]*)"\])?((?:#[A-Za-z0-9][A-Za-z0-9-]*)*)/g;
+            return /!(smallpic|pic)\{"([^"]+)"\}(?:\["([^"]*)"\])?((?:#[A-Za-z0-9][A-Za-z0-9-]*)*)/g;
+        }
+
+        function stripDisplayFlags(markdown) {
+            return String(markdown || '')
+                .split(/\r?\n/)
+                .filter((line) => {
+                    const trimmed = line.trim();
+                    return !trimmed.startsWith('//') && !trimmed.startsWith('@replace');
+                })
+                .join('\n')
+                .replace(/\/\*/g, '');
         }
 
         function pictureTags(raw) {
@@ -137,12 +181,22 @@
             for (const match of String(markdown || '').matchAll(picturePattern())) {
                 assets.push({
                     id: `${postId}-${assets.length}`,
-                    src: String(match[1]).trim(),
-                    description: match[2] ? String(match[2]).trim() : '',
-                    tags: pictureTags(match[3])
+                    kind: match[1],
+                    src: String(match[2]).trim(),
+                    description: match[3] ? String(match[3]).trim() : '',
+                    tags: pictureTags(match[4])
                 });
             }
             return assets;
+        }
+
+        // A post's cover is its first full-size picture; posts without one get a default background.
+        function coverFor(postId, assets) {
+            const picture = assets.find((asset) => asset.kind === 'pic') || assets[0];
+            if (picture) return picture.src;
+            let hash = 0;
+            for (const char of postId) hash = (hash * 31 + char.charCodeAt(0)) >>> 0;
+            return DEFAULT_COVERS[hash % DEFAULT_COVERS.length];
         }
 
         function promoMarkup(kind) {
@@ -203,24 +257,34 @@
             });
         }
 
+        function categoryMatch(post, sort) {
+            const category = String(post.category || '').toLowerCase();
+            if (sort === 'devlog') return category.includes('devlog');
+            if (sort === 'announcement') return category.includes('announcement');
+            if (sort === 'inside-look') return category.includes('inside look');
+            return true;
+        }
+
         function visiblePosts() {
             const query = document.getElementById('blog-search').value.trim().toLowerCase();
             const sort = document.getElementById('blog-sort').value;
             const posts = allPosts.filter((post) => {
                 const matchesTag = !activeTag || postTags(post).some((tag) => tag.toLowerCase() === activeTag.toLowerCase());
                 const matchesQuery = !query || postSearchText(post).includes(query);
-                return matchesTag && matchesQuery;
+                return matchesTag && matchesQuery && categoryMatch(post, sort);
             });
             posts.sort((a, b) => sort === 'oldest' ? postTime(a) - postTime(b) : postTime(b) - postTime(a));
             return posts;
         }
 
         function renderPager(total) {
-            const pager = document.getElementById('blog-pager');
+            const pagers = document.querySelectorAll('.blog-pager');
             const pageCount = Math.ceil(total / PAGE_SIZE);
             if (pageCount <= 1) {
-                pager.hidden = true;
-                pager.innerHTML = '';
+                pagers.forEach((pager) => {
+                    pager.hidden = true;
+                    pager.innerHTML = '';
+                });
                 return;
             }
 
@@ -231,22 +295,107 @@
                 return `<button class="blog-page${selected ? ' active' : ''}" type="button" data-page="${page}" aria-current="${selected ? 'page' : 'false'}">${page}</button>`;
             }).join('');
 
-            pager.hidden = false;
-            pager.innerHTML = `
-                <p class="blog-page-status">Showing ${start}–${end} of ${total}</p>
+            const markup = `
+                <p class="blog-page-status">Page ${currentPage} of ${pageCount} · Showing ${start}–${end} of ${total}</p>
                 <div class="blog-page-controls">
                     <button class="blog-page" type="button" data-page="${currentPage - 1}" ${currentPage === 1 ? 'disabled' : ''}>Previous</button>
                     ${pages}
                     <button class="blog-page" type="button" data-page="${currentPage + 1}" ${currentPage === pageCount ? 'disabled' : ''}>Next</button>
                 </div>
             `;
-            pager.querySelectorAll('.blog-page').forEach((button) => {
-                button.addEventListener('click', () => {
-                    if (button.disabled) return;
-                    currentPage = Number(button.dataset.page);
-                    renderBlog();
-                    document.getElementById('blog-panel').scrollIntoView({ behavior: 'smooth', block: 'start' });
+            pagers.forEach((pager) => {
+                pager.hidden = false;
+                pager.innerHTML = markup;
+                pager.querySelectorAll('.blog-page').forEach((button) => {
+                    button.addEventListener('click', () => {
+                        if (button.disabled) return;
+                        currentPage = Number(button.dataset.page);
+                        renderBlog();
+                        document.getElementById('blog-panel').scrollIntoView({ behavior: 'smooth', block: 'start' });
+                    });
                 });
+            });
+        }
+
+        function setPostOpen(card, open) {
+            card.classList.toggle('expanded', open);
+            const toggle = card.querySelector('.blog-card-header .blog-toggle');
+            if (toggle) {
+                toggle.setAttribute('aria-expanded', open ? 'true' : 'false');
+                toggle.textContent = open ? 'Close' : 'Read';
+            }
+        }
+
+        function closePost(card) {
+            setPostOpen(card, false);
+            requestAnimationFrame(() => {
+                document.getElementById('blog-panel').scrollIntoView({ behavior: 'smooth', block: 'start' });
+            });
+        }
+
+        function clearFilters() {
+            activeTag = '';
+            document.getElementById('blog-search').value = '';
+            document.getElementById('blog-sort').value = 'newest';
+        }
+
+        // Re-rendering the list closes whatever article is open.
+        function seeAll() {
+            assetMode = false;
+            clearFilters();
+            currentPage = 1;
+            renderBlog();
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function openPost(postId) {
+            assetMode = false;
+            let posts = visiblePosts();
+            if (!posts.some((post) => post.id === postId)) {
+                clearFilters();
+                posts = visiblePosts();
+            }
+            const index = posts.findIndex((post) => post.id === postId);
+            if (index < 0) return;
+            currentPage = Math.floor(index / PAGE_SIZE) + 1;
+            renderBlog();
+            const card = document.getElementById('post-' + postId);
+            if (!card) return;
+            setPostOpen(card, true);
+            requestAnimationFrame(() => {
+                card.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            });
+        }
+
+        function renderLatest() {
+            const section = document.getElementById('blog-latest');
+            const latest = [...allPosts].sort((a, b) => postTime(b) - postTime(a)).slice(0, LATEST_COUNT);
+            section.hidden = !latest.length;
+            if (!latest.length) {
+                section.innerHTML = '';
+                return;
+            }
+            const items = latest.map((post) => {
+                const category = post.category ? `<span class="blog-latest-category">${escapeHtml(post.category)}:</span> ` : '';
+                return `
+                    <li>
+                        <button class="blog-latest-item" type="button" data-post-id="${escapeHtml(post.id)}">
+                            <span class="blog-latest-title">${category}${escapeHtml(post.title || 'Untitled')}</span>
+                            <span class="blog-latest-age">${escapeHtml(timeAgo(post.datePublished))}</span>
+                        </button>
+                    </li>
+                `;
+            }).join('');
+            section.innerHTML = `
+                <div class="blog-latest-header">
+                    <h2>Latest</h2>
+                    <button class="blog-toggle" id="blog-see-all" type="button">See all</button>
+                </div>
+                <ol class="blog-latest-list">${items}</ol>
+            `;
+            document.getElementById('blog-see-all').addEventListener('click', seeAll);
+            section.querySelectorAll('.blog-latest-item').forEach((button) => {
+                button.addEventListener('click', () => openPost(button.dataset.postId));
             });
         }
 
@@ -279,17 +428,26 @@
                     post.readTime
                 ].filter(Boolean).map(escapeHtml).join(' · ');
 
+                const cover = post.cover ? `<img class="blog-card-cover" src="${escapeHtml(post.cover)}" alt="" loading="lazy" />` : '';
+
                 return `
-                    <article class="blog-card" id="post-${escapeHtml(post.id || index)}">
-                        <div class="blog-card-header">
-                            <div>
-                                <h2>${escapeHtml(post.title || 'Untitled')}</h2>
-                                <p class="blog-meta">${meta}</p>
+                    <article class="blog-card${cover ? ' has-cover' : ''}" id="post-${escapeHtml(post.id || index)}">
+                        <div class="blog-card-preview">
+                            <div class="blog-card-media">
+                                ${cover}
+                                <div class="blog-card-header">
+                                    <div>
+                                        <h2>${escapeHtml(post.title || 'Untitled')}</h2>
+                                        ${tags.length ? `<div class="blog-tags">${tags.map((tag) => `<button class="blog-tag" type="button" data-tag="${escapeHtml(tag)}">${escapeHtml(tagLabel(tag))}</button>`).join('')}</div>` : ''}
+                                    </div>
+                                    <button class="blog-toggle" type="button" aria-expanded="false">Read</button>
+                                </div>
                             </div>
-                            <button class="blog-toggle" type="button" aria-expanded="false">Read</button>
+                            <div class="blog-card-summary">
+                                ${meta ? `<p class="blog-meta">${meta}</p>` : ''}
+                                <p class="blog-excerpt">${escapeHtml(post.excerpt || '')}</p>
+                            </div>
                         </div>
-                        ${tags.length ? `<div class="blog-tags">${tags.map((tag) => `<button class="blog-tag" type="button" data-tag="${escapeHtml(tag)}">${escapeHtml(tagLabel(tag))}</button>`).join('')}</div>` : ''}
-                        <p class="blog-excerpt">${escapeHtml(post.excerpt || '')}</p>
                         <div class="blog-body">
                             ${post.content || ''}
                             <button class="blog-toggle blog-close" type="button">Close</button>
@@ -306,21 +464,13 @@
             }
             renderPager(posts.length);
 
-            function setPostOpen(card, open) {
-                card.classList.toggle('expanded', open);
-                const toggle = card.querySelector('.blog-card-header .blog-toggle');
-                if (toggle) {
-                    toggle.setAttribute('aria-expanded', open ? 'true' : 'false');
-                    toggle.textContent = open ? 'Close' : 'Read';
-                }
-            }
-
-            function closePost(card) {
-                setPostOpen(card, false);
-                requestAnimationFrame(() => {
-                    document.getElementById('blog-panel').scrollIntoView({ behavior: 'smooth', block: 'start' });
+            // A cover that fails to load falls back to the plain card.
+            list.querySelectorAll('.blog-card-cover').forEach((image) => {
+                image.addEventListener('error', () => {
+                    image.closest('.blog-card').classList.remove('has-cover');
+                    image.remove();
                 });
-            }
+            });
 
             list.querySelectorAll('.blog-card-header .blog-toggle').forEach((button) => {
                 button.addEventListener('click', () => {
@@ -368,16 +518,55 @@
             return (lastSpace > 0 ? cut.slice(0, lastSpace) : cut) + '...';
         }
 
+        function pictureFigure(kind, file, description, asset) {
+            const src = escapeHtml(String(file).trim());
+            const alt = escapeHtml(description ? String(description).trim() : 'Blog image');
+            const assetId = escapeHtml(asset.id || '');
+            const small = kind === 'smallpic' ? ' blog-smallpic' : '';
+            return `<figure class="blog-figure${small}" id="asset-${assetId}" data-asset-id="${assetId}"><img src="${src}" alt="${alt}"></figure>`;
+        }
+
         function blogPictures(markdown, assets) {
             const pictures = assets || [];
             let index = 0;
-            return String(markdown || '').replace(picturePattern(), (_, file, description) => {
+            const source = String(markdown || '');
+            const parts = [];
+            let last = 0;
+            for (const match of source.matchAll(picturePattern())) {
+                parts.push({ type: 'text', value: source.slice(last, match.index) });
                 const asset = pictures[index++] || {};
-                const src = escapeHtml(String(file).trim());
-                const alt = escapeHtml(description ? String(description).trim() : 'Blog image');
-                const assetId = escapeHtml(asset.id || '');
-                return `<figure class="blog-figure" id="asset-${assetId}" data-asset-id="${assetId}"><img src="${src}" alt="${alt}"></figure>`;
-            });
+                parts.push({
+                    type: match[1],
+                    html: pictureFigure(match[1], match[2], match[3], asset)
+                });
+                last = match.index + match[0].length;
+            }
+            parts.push({ type: 'text', value: source.slice(last) });
+
+            let html = '';
+            const smallGroup = [];
+            function flushSmall() {
+                if (!smallGroup.length) return;
+                html += `<div class="blog-smallpic-row">\n${smallGroup.join('\n')}\n</div>\n\n`;
+                smallGroup.length = 0;
+            }
+
+            for (let i = 0; i < parts.length; i++) {
+                const part = parts[i];
+                if (part.type === 'smallpic') {
+                    smallGroup.push(part.html);
+                    continue;
+                }
+                if (part.type === 'text' && smallGroup.length && !part.value.trim()) {
+                    const next = parts[i + 1];
+                    if (next && next.type === 'smallpic') continue;
+                }
+                flushSmall();
+                if (part.type === 'text') html += part.value;
+                else if (part.html) html += `${part.html}\n\n`;
+            }
+            flushSmall();
+            return html;
         }
 
         function markdownToHtml(markdown, assets) {
@@ -422,7 +611,7 @@
                 if (end >= 0) bodyStart = end + 1;
             }
 
-            const body = lines.slice(bodyStart).join('\n').trim();
+            const body = stripDisplayFlags(lines.slice(bodyStart).join('\n')).trim();
             if (!wordCount(body)) return null;
 
             const id = filename.replace(/\.md$/i, '').toLowerCase().replace(/[^a-z0-9]/g, '-');
@@ -435,10 +624,11 @@
                 datePublished: new Date().toISOString().slice(0, 10),
                 category: 'General',
                 tags: [],
+                cover: coverFor(id, assets),
                 ...frontmatter,
                 wordCount: words,
                 readTime: readingTime(words),
-                excerpt: frontmatter.excerpt || excerptFrom(content),
+                excerpt: stripDisplayFlags(frontmatter.excerpt || '').trim() || excerptFrom(content),
                 assets,
                 content
             };
@@ -507,14 +697,17 @@
         function applyAssetVisibility() {
             const panel = document.getElementById('asset-panel');
             const list = document.getElementById('blog-list');
-            const pager = document.getElementById('blog-pager');
             const button = document.getElementById('blog-asset-toggle');
             panel.hidden = !assetMode;
             list.hidden = assetMode;
             document.querySelectorAll('.blog-tools .blog-search, .blog-tools .blog-sort, #blog-tag-filters').forEach((control) => {
                 control.hidden = assetMode;
             });
-            if (assetMode) pager.hidden = true;
+            if (assetMode) {
+                document.querySelectorAll('.blog-pager').forEach((pager) => {
+                    pager.hidden = true;
+                });
+            }
             button.textContent = assetMode ? 'Back to posts' : 'Asset Search';
             button.classList.toggle('active', assetMode);
             button.setAttribute('aria-pressed', assetMode ? 'true' : 'false');
@@ -587,6 +780,7 @@
                 }));
                 allPosts = posts.filter(Boolean);
                 renderBlog();
+                renderLatest();
             } catch (error) {
                 console.error(error);
                 list.innerHTML = '<p class="blog-status">Posts could not be loaded.</p>';
@@ -610,7 +804,14 @@
         document.getElementById('asset-search').addEventListener('input', () => {
             renderAssets();
         });
-        document.getElementById('blog-rail').innerHTML = promoMarkup('blog-ad-rail');
+        // When the rail is taller than the window, pin its bottom instead of its top so Latest stays in view.
+        const rail = document.getElementById('blog-rail');
+        function fitRail() {
+            rail.style.top = Math.min(20, window.innerHeight - rail.offsetHeight - 20) + 'px';
+        }
+        rail.insertAdjacentHTML('afterbegin', promoMarkup('blog-ad-rail'));
+        new ResizeObserver(fitRail).observe(rail);
+        window.addEventListener('resize', fitRail);
         loadPosts();
     </script>
     <script src="button-approach.js?v=20261027q"></script>

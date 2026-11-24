@@ -1,7 +1,7 @@
 ---
-title: SCA Devlog 1 - Current State and Project Organization.
+title: Devlog #1 - What's Done and What's Not...
 datePublished: 2026-10-27
-category: Devlog
+category: Space Combat Arena - Devlog
 tags: ["Space Combat Arena", "devlog", "Godot", "plugins", "workflow organization"]
 excerpt: "The game is firmly in the prototype state and I want to move it into demo state quickly."
 readTime: 4 min read

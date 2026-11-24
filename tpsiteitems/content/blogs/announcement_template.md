@@ -1,29 +1,33 @@
 ---
-title: Space Combat Arena Announcement
+title: Coming (very) Soon: Space Combat Arena
 datePublished: 2026-10-26
-category: News and Announcements
-tags: ["Space Combat Arena", "annoucement"]
-excerpt: "It's like Galaga got modernized and turned into a PVP shooter."
+category: Announcement
+tags: ["Space Combat Arena", "annoucement", "demo"]
+excerpt: "Space Combat Arena is Officially Putting Out a Demo"
 readTime: 4 min read
 ---
 
+// Announcement Cover Image Goes Here (if not using default backgrounds):
 !pic{"assets/images/blog/SCA - fullscreen title menu.png"}["Space Combat Arena Introduction"]#sca-menu-title-screen
 
 # Fly Fast. Hit Hard. Build Better.
 
 Space Combat Arena is a fast, top-down spaceship fighter. Classic arcade shooting meets the snap decisions of a platform fighter: tactical, bright, and built to feel good in the first ten seconds. The pitch we keep coming back to is simple. If Galaga grew up into a modern PVP game. If Super Smash Bros were a shooter, and the fighters were spaceships.
 
-## How the Game Feels
+## Three Weeks Away From Demo One
 
-Summarize gameplay feels, combat feel, progression feel.
+// single line summary: approximately this long:
+Summary of this section. Like a thesis statement. But instead of being written in full, comprehensive paragraphs, it's just written one line at a time.
 
-Combat is high mobility and only lightly tactical. You are not managing a spreadsheet. You are reading the arena, picking a ship, and committing.
-
-Players progress weapons and items, then save several ship builds the way a shooter saves loadouts. Those builds come into best-of-three matches, in 1v1 or 3v3. A few base ship types keep the roster readable. Swapping weapons and loadouts mid-fight keeps the arena from settling into one answer.
-
-Maps are mostly there for scale. They should feel like a cinematic battlefield, not a maze. We are still deciding how much the environment pushes back: occasional destructible pieces, physics obstacles, and hazards that range from annoying to actually dangerous.
+More info and announcement details...
+More info and announcement details...
+More info and announcement details...
+More info and announcement details...
 
 ## How the Game Looks
+
+// single line summary: approximately this long:
+This is seciton two. Like a thesis .  instead of being written in full, comprehensive paragraphs, it's just written one line at a time.
 
 Ships are bright, colorful 2D sci-fi, drawn in a higher-resolution pixel-art style from a loose top-down view. Pixel art is the default on purpose. It is a nod to the arcade games this is stealing from. Other art styles can show up later as optional downloads. Only the ships, and maybe a few map features, need to live in that pixel style.
 
@@ -35,6 +39,9 @@ The title screen idea is the name collapsing into a pulsar, and that pulsar beco
 
 ## Where it stands
 
+// single line summary: approximately this long:
+This is seciton three. threeeeee instead of being written in full, comprehensive paragraphs, it's just written one line at a time.
+
 This is an early design note, not a release announcement. The public playtest is offline while we keep building.
 
 The target is a 6 to 12 month production once a Kickstarter lands and hiring is underway, with a release window in Q3 or Q4 of 2027. The base game would ship with two optional downloadable packs, first offered during that campaign.
@@ -42,3 +49,17 @@ The target is a 6 to 12 month production once a Kickstarter lands and hiring is 
 The engine is Godot. Sound is planned around FMOD, if it holds up on every platform we export to. Everyone on the project needs to be comfortable in Godot or something close to it. The shape of the team, if the campaign supports it: a gameplay designer and programmer, a network engineer when multiplayer needs one, an art director, contract artists as the shots require them, a sound designer and composer, a social lead, and a second programmer if the schedule asks for it.
 
 Until then, the short version stays the same. Build. Fly. Fight. Repeat.
+
+# Final Thoughts
+
+// This will be turned into the caption:
+Summary of thoughts and stuff that will be in the caption section of a post. or maybe update on how all of the above progressed. like we were able to do that. yay.
+Restatement of thesis. Closing arguements. Etc. Etc. - turn into caption
+
+Other text.
+
+// Call to Action Options (use one):
+// USEWISHLIST
+// USENEWSLETTER
+// USEDEMO
+Subscribe or Follow for more updates!
